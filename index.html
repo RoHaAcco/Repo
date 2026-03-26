@@ -693,8 +693,6 @@ function IntroScreen({ onAccept }) {
               Deine persönliche Einsatzakte und ein <strong style={{ color: PURPLE }}>geheimer Auftrag</strong> warten.<br />
               <span style={{ color: MUTED, fontSize: 11 }}>Destination: ████████ · Wird bei Ankunft offenbart.</span>
             </div>
-            <button
-              onClick={() => {}}
             <UnlockGate pin={UNLOCK_PIN} onSuccess={() => {
                 try {
                   const ctx = new (window.AudioContext || window.webkitAudioContext)();
