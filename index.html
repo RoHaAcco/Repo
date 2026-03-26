@@ -11,12 +11,54 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0a0a0f; }
     button { cursor: pointer; }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+    @keyframes flicker {
+      0%,100% { opacity: 1; } 92% { opacity: 1; } 93% { opacity: 0.4; } 94% { opacity: 1; } 96% { opacity: 0.7; } 97% { opacity: 1; }
+    }
+    @keyframes glitch1 {
+      0%,89%,100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+      90% { clip-path: inset(20% 0 60% 0); transform: translate(-4px, 2px); }
+      92% { clip-path: inset(50% 0 30% 0); transform: translate(4px, -2px); }
+      94% { clip-path: inset(70% 0 10% 0); transform: translate(-2px, 1px); }
+      96% { clip-path: inset(10% 0 80% 0); transform: translate(2px, -1px); }
+    }
+    @keyframes glitch2 {
+      0%,89%,100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+      90% { clip-path: inset(60% 0 20% 0); transform: translate(4px, -2px); }
+      92% { clip-path: inset(30% 0 50% 0); transform: translate(-4px, 2px); }
+      94% { clip-path: inset(10% 0 70% 0); transform: translate(2px, -1px); }
+      96% { clip-path: inset(80% 0 10% 0); transform: translate(-2px, 1px); }
+    }
+    @keyframes pulseGold {
+      0%,100% { box-shadow: 0 0 6px #f0c04033; }
+      50% { box-shadow: 0 0 20px #f0c04088, 0 0 40px #f0c04022; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink {
+      0%,100% { opacity: 1; } 50% { opacity: 0; }
+    }
+    .scanline {
+      position: fixed; top: 0; left: 0; right: 0; height: 2px;
+      background: rgba(240,192,64,0.06);
+      animation: scanline 5s linear infinite;
+      pointer-events: none; z-index: 9999;
+    }
+    .flicker { animation: flicker 10s infinite; }
+    .fade-in-up { animation: fadeInUp 0.45s ease both; }
+    .cursor-blink { animation: blink 1s step-end infinite; }
+    .pulse-gold { animation: pulseGold 2.5s ease infinite; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState } = React;
+const { useState, useEffect, useRef } = React;
 
 
 // PINs – bitte einzeln per WhatsApp verschicken!
@@ -129,7 +171,7 @@ const data = {
   leon: {
     emoji: "😄", label: "Leon P.", group: "geheim",
     deckname: "Deckname: Der Gemütliche | Funktion: 2. Vorstand | Bartwuchs: Projekt läuft, Ergebnis offen",
-    bio: "Bekannt für: Gemütlichkeit auf absolutem Profiniveau, echten Vibe und Herzlichkeit ohne Aufwand. Kein nennenswerter Bartwuchs – wir erwähnen es, weil er es hasst. Zweiter Vorstand mit Herz aus purem Gold.",
+    bio: "Bekannt für: Gemütlichkeit auf absolutem Profiniveau, echter Geselligkeit und einem Kopf, der mehr denkt als er verrät – studiert immerhin. Kein nennenswerter Bartwuchs – wir erwähnen es, weil er es hasst. Kartenspiele? Gewinnt meistens. Zweiter Vorstand mit Herz aus purem Gold.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Deine Gemütlichkeit macht den Boden physikalisch leider nicht weicher.", badge: "MUSS" },
@@ -137,13 +179,13 @@ const data = {
         { name: "Ausweis oder Reisepass", note: "Sympathie allein reicht nicht als Einreisedokument.", badge: "MUSS" },
       ]},
       { title: "😄 Leons Gemütlichkeits-Arsenal", items: [
+        { name: "Kartenspiel (mindestens eines, besser zwei)", note: "Du wirst gewinnen. Alle wissen es. Du weißt es. Die Karten wissen es." },
         { name: "Bartwuchs-Booster-Serum (Apotheke genügt völlig)", note: "Das Projekt läuft. Die Genetik verhandelt noch. Das Serum hält die Hoffnung lebendig." },
         { name: "Kuscheldecke (komprimierbar, Rucksackformat)", note: "Du bist ein Riesenbaby – das ist kein Vorwurf, das ist eine Beschreibung mit echter Zuneigung." },
         { name: "Schnuller (ironisch verpackt, mit Schleifchen)", note: "Für den absoluten Notfall. Riesenbabys wollen versorgt werden.", badge: "OPTIONAL" },
         { name: "Riesenportion Gummibärchen (mindestens 500g)", note: "Gemütlichkeit braucht Grundversorgung. Hunger ist kein Vibe." },
         { name: "Aufblasbare Sitzunterlage für die Zugfahrt", note: "Komfort ist keine Schwäche. Komfort ist eine bewusste Lebenshaltung." },
         { name: "Zweiter-Vorstand-Abzeichen (selbst laminiert)", note: "Damit man's weiß. Und damit Maxis Abzeichen im direkten Vergleich noch imposanter wirkt." },
-        { name: "Playlist: Gute Laune oder gar nichts", note: "Fertig kuratiert, geladen, Bluetooth-bereit. Wird ohne Vorwarnung aktiviert." },
         { name: "Nackenkissen (Reiseformat, Einheitsgröße)", note: "Lange Fahrt. Dein Nacken hat das absolut verdient. Du auch." },
       ]},
     ],
@@ -193,21 +235,21 @@ const data = {
   emily: {
     emoji: "🌿", label: "Emily S.", group: "geheim",
     deckname: "Deckname: Die Vernunft | Funktion: Moralischer Anker und stille Gruppenretterin",
-    bio: "Bekannt für: Vernunft – in der Theorie solide verankert. Aktuell auf No-Alk- und Vegetarismus-Trip. War in Malle als Erste beim Nacktbaden (kein weiterer Kommentar). Jüngste im Team. Gute Seele mit erkennbar rebellischer Ader.",
+    bio: "Bekannt für: Gute Noten ohne großes Aufheben, nebenbei Kellnerin im Restaurant – und damit die einzige in der Gruppe mit echtem Servicegedanken. Jüngste im Team, aber mit Köpfchen weit vorne. Aktuell in einer No-Alk- und Vegetarismus-Phase – das Komitee wertet das als Experiment, nicht als Lebenseinstellung. Gute Seele mit erkennbar pragmatischer Ader: Wenn die Motivation stimmt, ist Emily dabei.",
     sections: [
-      { title: "🏕️ Pflicht", items: [
-        { name: "Isomatte", note: "Auch die Vernunft braucht Schlaf. Manchmal sogar mehr als alle anderen.", badge: "MUSS" },
-        { name: "Schlafsack", note: "Kuschelig, vegan, ohne Zusatzstoffe, kein Alkohol enthalten.", badge: "MUSS" },
-        { name: "Ausweis oder Reisepass", note: "Die Vernunft hat ihre Dokumente immer dabei. Das Komitee weiß das.", badge: "MUSS" },
+      { title: "🌿 Emilys Survival-Kit", items: [
+        { name: "Isomatte", note: "Auch die Jüngste braucht Schlaf. Manchmal sogar mehr als alle anderen.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Kuschelig. Ohne weitere Deklaration.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Die Beste der Klasse hat ihre Dokumente immer dabei. Das Komitee weiß das.", badge: "MUSS" },
       ]},
-      { title: "🌿 Emilys Ich-bin-vernünftig-Paket", items: [
-        { name: "Alkoholfreier Sekt – 1 Flasche, ordentliche Qualität", note: "Zum Anstoßen. Ohne schlechtes Gewissen. Du feierst genauso mit – nur deutlich klarer." },
-        { name: "Vegane Reisesnacks (Menge: deutlich zu viel)", note: "Die anderen essen irgendwas Fragwürdiges. Du hast vorgesorgt. Das nennt sich Strategie." },
+      { title: "🌿 Emilys persönliches Wochenend-Paket", items: [
+        { name: "Kellnerinnen-Notizbuch (für spontane Bestellaufnahmen)", note: "Alte Gewohnheiten sterben nicht. Irgendwann nimmt sie unbewusst die Bestellung der Gruppe auf." },
+        { name: "Trinkgeld-Portemonnaie (gut gefüllt)", note: "Wer kellnert, weiß wie das Wochenende läuft. Und kalkuliert entsprechend vor." },
+        { name: "Lernkarten (für das schlechte Gewissen am Sonntag)", note: "Werden eingepackt. Werden nicht angeschaut. Werden beruhigend im Rucksack mitgetragen." },
         { name: "Badeanzug (sicherheitshalber, ohne Hintergedanken)", note: "Nur für Schwimmbäder natürlich. Was in Malle passiert ist, ist nicht Gegenstand dieser Liste." },
-        { name: "Laminierte Nein-danke-Karte (doppelseitig)", note: "Für Angebote aller Art. Wird mit Würde präsentiert. Wird von der Gruppe herzlich ignoriert." },
-        { name: "Sonnencreme LSF 50+ (vegan zertifiziert)", note: "Wozu genau – wird vor Ort klar. Einfach einpacken." },
-        { name: "Tagebuch: Was ich diesmal wirklich nicht tue", note: "Für die Liste der guten Vorsätze. Sorgfältig geführt. Enthusiastisch unterschritten." },
-        { name: "Vegane Notfallschokolade (dunkel, 70% aufwärts)", note: "Für Momente, in denen die Vernunft kurz Pause macht. Die kommen. Immer." },
+        { name: "Sonnencreme LSF 50+", note: "Wozu genau – wird vor Ort klar. Einfach einpacken." },
+        { name: "Notfallschokolade (die gute)", note: "Phase hin oder her – Schokolade ist kein Dogma, das ist Medizin." },
+        { name: "Portemonnaie (gut bestückt, Motivation ist alles)", note: "Emily ist bekannt dafür, dass die richtige Motivation Wunder wirkt. Das Wochenende bietet Gelegenheiten." },
         { name: "Kerze (Duftrichtung: Beherrschung)", note: "Existiert nicht als echtes Produkt. Steht trotzdem auf der Liste. Das Komitee ist kreativ." },
       ]},
     ],
@@ -220,7 +262,7 @@ const data = {
       ],
       warning: "Die nicht Eingeweihten dürfen nie von diesem Bingo erfahren. Codewort: Vernunft. Kein Lachen wenn jemand es sagt."
     },
-    warning: "Emily ist die Vernunft der Gruppe. Das Komitee wünscht ihr aufrichtig und von Herzen viel Erfolg dabei."
+    warning: "Emily ist die Jüngste – aber unterschätzt sie nicht. Gute Noten, guter Service, gute Argumente."
   },
 
   // ── EINGEWEIHT ────────────────────────────
@@ -289,9 +331,9 @@ const data = {
   },
 
   jule: {
-    emoji: "🎉", label: "Jule L.", group: "eingeweiht",
-    deckname: "Deckname: Die Allzweckwaffe | Funktion: Ehemalige Social-Media-Beauftragte · Hortfachkraft · Partywildcard",
-    bio: "Bekannt für: Bei jedem Spaß dabei, immer. Eigenes Haus seit kurzem, seit letztem Jahr verheiratet. Arbeitet mit Kindern – was die Toleranzschwelle für Chaos nachweislich erhöht. Trinkt gerne viel und wird dann putzig auf eine Weise, die niemanden stört und alle entzückt.",
+    emoji: "🎉", label: "Jule G.", group: "eingeweiht",
+    deckname: "Deckname: Die Allzweckwaffe | Funktion: Ehemalige Social-Media-Beauftragte · Kinderkrippen-Fachkraft · Partywildcard",
+    bio: "Bekannt für: Bei jedem Spaß dabei, immer. Eigenes Haus seit kurzem, seit letztem Jahr verheiratet – und damit frisch umbenannt zu Graßl. Arbeitet in der Kinderkrippe – was die Toleranzschwelle für Chaos auf ein professionelles Niveau hebt. Trinkt gerne viel und wird dann putzig auf eine Weise, die niemanden stört und alle entzückt.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Auch wer immer dabei ist, braucht irgendwann einen Platz zum Liegen.", badge: "MUSS" },
@@ -303,8 +345,8 @@ const data = {
         { name: "Propskiste (Partyhüte, Sonnenbrillen, Schnurrbart-Sticker)", note: "Für Fotos, die in zehn Jahren noch lustig sind. Oder peinlich. Beides zählt." },
         { name: "Trinkspiel-Karten (reisefertig, wasserfest)", note: "Nur zur Sicherheit. Für den Fall, dass jemand Struktur braucht." },
         { name: "Großes Tuch / Pareo (Multifunktional)", note: "Decke, Sitzmatte, Verkleidung, Flagge – du findest den Einsatz." },
-        { name: "Kindersicherheits-Reflex ausschalten (für das Wochenende)", note: "Du arbeitest mit Kindern. Die Gruppe ist keine Kindergruppe. Meistens.", badge: "OPTIONAL" },
-        { name: "Wasserflaschen-Aufkleber: Jule's Flasche – Finger weg", note: "Präventiv. Mit Kindern arbeiten lehrt: beschriften hilft." },
+        { name: "Kinderkrippen-Reflex ausschalten (für das Wochenende)", note: "Du arbeitest mit Kleinkindern. Die Gruppe ist keine Kleinkindergruppe. Meistens.", badge: "OPTIONAL" },
+        { name: "Wasserflaschen-Aufkleber: Jule's Flasche – Finger weg", note: "Präventiv. In der Kinderkrippe arbeiten lehrt: beschriften hilft." },
         { name: "Playlist: Hort-Hits die niemand kennen soll", note: "Du hörst sie heimlich. Irgendwann läuft sie versehentlich. Das wird unvergesslich." },
       ]},
     ],
@@ -435,16 +477,213 @@ function SecretSection({ secret, pin }) {
   );
 }
 
-function MissionPage({ onStart }) {
-  const [visible, setVisible] = useState(0);
-  const lines = ["VERSCHLÜSSELTE NACHRICHT EMPFANGEN...","ABSENDER: UNBEKANNT","ENTSCHLÜSSELUNG LÄUFT...","ZUGRIFF GEWÄHRT."];
-  useState(() => { lines.forEach((_,i) => setTimeout(()=>setVisible(i+1), i*750)); });
+
+// ── TYPEWRITER COMPONENT ─────────────────────
+function TypewriterText({ text, speed, style }) {
+  const [displayed, setDisplayed] = useState("");
+  const idx = useRef(0);
+  useEffect(() => {
+    idx.current = 0;
+    setDisplayed("");
+    const id = setInterval(() => {
+      idx.current++;
+      setDisplayed(text.slice(0, idx.current));
+      if (idx.current >= text.length) clearInterval(id);
+    }, speed || 20);
+    return () => clearInterval(id);
+  }, [text]);
+  return <div style={style}>{displayed}{displayed.length < text.length ? <span className="cursor-blink" style={{color:"#7060f0"}}> █</span> : ""}</div>;
+}
+
+
+// ── INTRO SCREEN ─────────────────────────────
+function IntroScreen({ onAccept }) {
+  const [phase, setPhase] = useState(0);
+  const [countdown, setCountdown] = useState({d:0,h:0,m:0,s:0});
+  const audioRef = useRef(null);
+
+  // Countdown to 2026-05-29 15:00:00
+  useEffect(() => {
+    const target = new Date('2026-05-29T15:00:00');
+    const tick = () => {
+      const now = new Date();
+      const diff = target - now;
+      if (diff <= 0) { setCountdown({d:0,h:0,m:0,s:0}); return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      setCountdown({d,h,m,s});
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  // Phase progression
+  useEffect(() => {
+    const timings = [600, 1400, 2200, 3000, 3800];
+    timings.forEach((t, i) => setTimeout(() => setPhase(i+1), t));
+  }, []);
+
+  // Sound: synthesized beep sequence via Web Audio API
+  useEffect(() => {
+    if (phase === 1) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const beeps = [
+          { freq: 880, start: 0,   dur: 0.08 },
+          { freq: 660, start: 0.12, dur: 0.08 },
+          { freq: 880, start: 0.24, dur: 0.08 },
+          { freq: 1100,start: 0.4,  dur: 0.15 },
+          { freq: 440, start: 0.65, dur: 0.06 },
+          { freq: 440, start: 0.75, dur: 0.06 },
+          { freq: 880, start: 0.9,  dur: 0.25 },
+        ];
+        beeps.forEach(({freq, start, dur}) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.frequency.value = freq;
+          osc.type = 'square';
+          gain.gain.setValueAtTime(0, ctx.currentTime + start);
+          gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + start + 0.01);
+          gain.gain.linearRampToValueAtTime(0, ctx.currentTime + start + dur);
+          osc.start(ctx.currentTime + start);
+          osc.stop(ctx.currentTime + start + dur + 0.01);
+        });
+      } catch(e) {}
+    }
+  }, [phase]);
+
+  const termLines = [
+    "> EINGEHENDE TRANSMISSION...",
+    "> ABSENDER: [KLASSIFIZIERT]",
+    "> VERSCHLUESSELUNG: AES-256 · INTEGRITAET: OK",
+    "> ENTSCHLUESSELUNG ABGESCHLOSSEN.",
+    "> NACHRICHT FUER: DICH.",
+  ];
+
+  const pad = n => String(n).padStart(2,'0');
 
   return (
+    <div className="flicker" style={{ background: BG, minHeight: "100vh", fontFamily: "monospace", color: TEXT, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "24px 20px", position: "relative", overflow: "hidden" }}>
+      <div className="scanline" />
+
+      {/* Subtle grid background */}
+      <div style={{ position: "fixed", inset: 0, backgroundImage: "linear-gradient(rgba(112,96,240,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(112,96,240,0.03) 1px, transparent 1px)", backgroundSize: "40px 40px", pointerEvents: "none" }} />
+
+      <div style={{ maxWidth: 560, width: "100%", position: "relative", zIndex: 1 }}>
+
+        {/* Terminal lines */}
+        <div style={{ marginBottom: 32, minHeight: 110 }}>
+          {termLines.slice(0, phase).map((l, i) => (
+            <div key={i} className="fade-in-up" style={{ fontSize: 11, color: i === phase-1 ? ACCENT : MUTED, letterSpacing: "0.15em", marginBottom: 7, lineHeight: 1.6 }}>
+              {l}{i === phase-1 && phase < 5 ? <span className="cursor-blink" style={{ color: ACCENT }}> █</span> : ""}
+            </div>
+          ))}
+        </div>
+
+        {/* Big title – glitch effect */}
+        {phase >= 3 && (
+          <div className="fade-in-up" style={{ textAlign: "center", marginBottom: 32, position: "relative" }}>
+            <div style={{ display: "inline-block", background: RED, color: "#fff", fontSize: 10, letterSpacing: "0.35em", padding: "4px 18px", marginBottom: 14, transform: "rotate(-1.5deg)", position: "relative", zIndex: 1 }}>
+              OPERATION #BEST-TEAM · STRENG GEHEIM
+            </div>
+            {/* Glitch layers */}
+            <div style={{ position: "relative" }}>
+              <div style={{ fontSize: "clamp(3rem,12vw,5.5rem)", fontWeight: 900, color: ACCENT, lineHeight: 0.95, fontFamily: "sans-serif", letterSpacing: "-0.02em" }}>
+                #BEST-Team
+              </div>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, fontSize: "clamp(3rem,12vw,5.5rem)", fontWeight: 900, color: "#ff4060", lineHeight: 0.95, fontFamily: "sans-serif", letterSpacing: "-0.02em", opacity: 0.5, animation: "glitch1 5s ease infinite", mixBlendMode: "screen" }}>
+                #BEST-Team
+              </div>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, fontSize: "clamp(3rem,12vw,5.5rem)", fontWeight: 900, color: "#40f0f0", lineHeight: 0.95, fontFamily: "sans-serif", letterSpacing: "-0.02em", opacity: 0.4, animation: "glitch2 5s ease infinite", mixBlendMode: "screen" }}>
+                #BEST-Team
+              </div>
+            </div>
+            <div style={{ fontSize: "clamp(1.4rem,6vw,2.8rem)", fontWeight: 900, color: PURPLE, fontFamily: "sans-serif", marginTop: 4 }}>
+              goes <span style={{ letterSpacing: "0.1em" }}>░░░░░░░░░</span>
+            </div>
+          </div>
+        )}
+
+        {/* Countdown */}
+        {phase >= 4 && (
+          <div className="fade-in-up" style={{ marginBottom: 32 }}>
+            <div style={{ fontSize: 10, color: MUTED, letterSpacing: "0.25em", textAlign: "center", marginBottom: 12 }}>
+              ── ABHOLZEITPUNKT: 29.05.2026 · 15:00 UHR ──
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+              {[["TAGE", countdown.d], ["STUNDEN", countdown.h], ["MINUTEN", countdown.m], ["SEKUNDEN", countdown.s]].map(([label, val]) => (
+                <div key={label} className="pulse-gold" style={{ background: CARD, border: `1px solid ${BORDER}`, padding: "14px 8px", textAlign: "center" }}>
+                  <div style={{ fontSize: "clamp(1.6rem,6vw,2.8rem)", fontWeight: 900, fontFamily: "sans-serif", color: val === countdown.s ? "#ff6060" : ACCENT, lineHeight: 1, transition: "color 0.3s" }}>
+                    {pad(val)}
+                  </div>
+                  <div style={{ fontSize: 9, color: MUTED, letterSpacing: "0.2em", marginTop: 4 }}>{label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Mission accept button */}
+        {phase >= 5 && (
+          <div className="fade-in-up">
+            <div style={{ border: `1px solid ${BORDER}`, background: CARD, padding: "16px 20px", marginBottom: 20, fontSize: 12, color: "#8888aa", lineHeight: 1.9, textAlign: "center" }}>
+              Diese Nachricht ist <strong style={{ color: TEXT }}>ausschliesslich fuer dich bestimmt</strong>.<br />
+              Deine persoenliche Einsatzakte und ein <strong style={{ color: PURPLE }}>geheimer Auftrag</strong> warten.<br />
+              <span style={{ color: MUTED, fontSize: 11 }}>Destination: ████████ · Wird bei Ankunft offenbart.</span>
+            </div>
+            <button
+              onClick={() => {
+                try {
+                  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                  const notes = [523, 659, 784, 1047];
+                  notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = freq;
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0, ctx.currentTime + i*0.1);
+                    gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + i*0.1 + 0.02);
+                    gain.gain.linearRampToValueAtTime(0, ctx.currentTime + i*0.1 + 0.15);
+                    osc.start(ctx.currentTime + i*0.1);
+                    osc.stop(ctx.currentTime + i*0.1 + 0.2);
+                  });
+                } catch(e) {}
+                setTimeout(onAccept, 300);
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#8878ff"; e.currentTarget.style.transform = "scale(1.02)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = PURPLE; e.currentTarget.style.transform = "scale(1)"; }}
+              style={{ display: "block", width: "100%", padding: "18px 16px", background: PURPLE, border: `1px solid ${PURPLE}`, color: "#fff", fontSize: 15, letterSpacing: "0.25em", fontFamily: "monospace", fontWeight: 700, transition: "all 0.15s", boxShadow: "0 0 30px #7060f066" }}
+            >
+              ▶ &nbsp; MISSION ANNEHMEN
+            </button>
+            <div style={{ textAlign: "center", marginTop: 10, fontSize: 10, color: MUTED, letterSpacing: "0.1em" }}>
+              Diese Nachricht zerstoert sich nach dem Oeffnen. Oder auch nicht.
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── MISSION PAGE (Briefing) ───────────────────
+function MissionPage({ onStart }) {
+  const [visible, setVisible] = useState(0);
+  const lines = ["VERSCHLUESSELTE NACHRICHT EMPFANGEN...","ABSENDER: UNBEKANNT","ENTSCHLUESSELUNG LAEUFT...","ZUGRIFF GEWAEHRT."];
+  useEffect(() => { lines.forEach((_,i) => setTimeout(()=>setVisible(i+1), i*750)); }, []);
+
+  // Typewriter hook for bio
+  return (
     <div style={{ background: BG, minHeight: "100vh", fontFamily: "monospace", color: TEXT, padding: "32px 20px 64px", maxWidth: 700, margin: "0 auto" }}>
+      <div className="scanline" />
       <div style={{ marginBottom: 28, minHeight: 88 }}>
         {lines.slice(0,visible).map((l,i) => (
-          <div key={i} style={{ fontSize: 11, color: i===visible-1 ? ACCENT : MUTED, letterSpacing: "0.15em", marginBottom: 6 }}>&gt; {l}</div>
+          <div key={i} style={{ fontSize: 11, color: i===visible-1 ? ACCENT : MUTED, letterSpacing: "0.15em", marginBottom: 6 }}>&gt; {l}{i===visible-1 && visible<4 ? <span className="cursor-blink" style={{color:ACCENT}}> █</span> : ""}</div>
         ))}
       </div>
       <div style={{ textAlign: "center", marginBottom: 28 }}>
@@ -455,86 +694,18 @@ function MissionPage({ onStart }) {
       </div>
       <div style={{ borderTop: `1px solid ${BORDER}`, margin: "24px 0" }} />
 
-      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
-        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>📋 MISSIONSBRIEFING</div>
-        <div style={{ padding: 16, fontSize: 13, color: "#9999bb", lineHeight: 2 }}>
-          Agent/in,<br /><br />
-          du hältst gerade das einzige Dokument in Händen, das zwischen einem legendären Wochenende und totaler Gepäck-Katastrophe steht.<br /><br />
-          Das <strong style={{ color: TEXT }}>Geheimkomitee</strong> hat deine persönliche Einsatzakte zusammengestellt – basierend auf deiner Persönlichkeit, deiner Reisehistorie und einem Algorithmus, der nach mehrfacher interner Prüfung noch immer keinen vollständigen Sinn ergibt.<br /><br />
-          Die <strong style={{ color: TEXT }}>Destination</strong> ist für einen Teil des Teams bis zur Ankunft vollständig klassifiziert. Spekulationen werden aktiv demontiert. Fragen werden nicht beantwortet.<br /><br />
-          Jede Akte enthält außerdem einen <strong style={{ color: PURPLE }}>persönlichen Geheimauftrag</strong> – gesichert durch deinen individuellen PIN. Nur du kennst ihn. Nur du darfst ihn sehen.<br /><br />
-          Deine Aufgabe: Pack. Erscheine pünktlich. Bring keine übermäßige Vernunft mit – es sei denn, du heißt Emily.
-        </div>
-      </div>
-
-      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
-        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>⚖️ OPERATIVE GRUNDREGELN</div>
-        {[
-          ["§1","Isomatte und Schlafsack sind Pflicht. Kein Verhandlungsspielraum. Keine Ausnahmen."],
-          ["§2","Reisepass oder Personalausweis ist einzupacken. Der Grund wird spätestens vor Ort klar."],
-          ["§3","Was auf der Reise passiert, bleibt auf der Reise. Maxi verfügt über Schweigegeld in Fremdwährung."],
-          ["§4","Jede Akte enthält einen Geheimauftrag mit persönlichem PIN. Nicht teilen, nicht zeigen, nicht andeuten."],
-          ["§5","Das Komitee behält sich vor, alle Ereignisse im Nachhinein als vollständig geplant darzustellen."],
-          ["§6","Jannik führt die Gruppe. Robert führt, wenn Jannik ausfällt. Die Gruppe überlebt das."],
-        ].map(([n,t]) => (
-          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12 }}>
-            <span style={{ color: RED, fontWeight: 700, flexShrink: 0, fontSize: 12 }}>{n}</span>
-            <span style={{ fontSize: 12, color: MUTED, lineHeight: 1.6 }}>{t}</span>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
-        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>👥 EINSATZTEAM – VOLLSTÄNDIGE ÜBERSICHT</div>
-        <div style={{ padding: "6px 16px", background: "#0f1f0f", fontSize: 10, color: GREEN, letterSpacing: "0.15em" }}>● NICHT EINGEWEIHT</div>
-        {[
-          ["🌀","Jannik B.","Reiseleiter · Chaos-Offizier · Snus-Depot auf zwei Beinen"],
-          ["🎩","Maxi L.","Vorstand · Stille Wasser · Schnupftabak-Connaisseur"],
-          ["😄","Leon P.","2. Vorstand · Gemütlichkeits-Beauftragter · Bartwuchs: in Verhandlung"],
-          ["🔮","Maya L.","Erste-Hilfe-Fee · Geheime Partymaschine · Maxis Schwester"],
-          ["🌿","Emily S.","Die Vernunft · Jüngste · No-Alk-Aktivistin (Stand: aktuell)"],
-        ].map(([e,n,r]) => (
-          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
-            <span style={{ fontSize: 18, flexShrink: 0 }}>{e}</span>
-            <div><div style={{ fontSize: 13, color: TEXT }}>{n}</div><div style={{ fontSize: 11, color: MUTED }}>{r}</div></div>
-          </div>
-        ))}
-        <div style={{ padding: "6px 16px", background: "#0f1a2f", fontSize: 10, color: "#60a0f0", letterSpacing: "0.15em" }}>● EINGEWEIHT</div>
-        {[
-          ["🚒","Robert H.","Backup-Reiseleiter · Ehem. 1. Vorstand · Feuerwehrkommandant · IT-ler"],
-          ["🏠","Luca P.","Ehem. Kassier · Familienmensch auf Ausgang · Leons großer Bruder"],
-          ["🎉","Jule L.","Ehemalige Social-Media · Hortfachkraft · Partywildcard"],
-          ["🎺","Alex H.","Ehem. 2. Vorstand · Halbmarathonläufer · Partyband-Frontmann · Kichererbse"],
-        ].map(([e,n,r]) => (
-          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
-            <span style={{ fontSize: 18, flexShrink: 0 }}>{e}</span>
-            <div>
-              <div style={{ fontSize: 13, color: TEXT, display: "flex", alignItems: "center", gap: 8 }}>{n} <span style={{ fontSize: 9, background: "#14532d", color: "#86efac", padding: "1px 6px", letterSpacing: "0.1em" }}>EINGEWEIHT</span></div>
-              <div style={{ fontSize: 11, color: MUTED }}>{r}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <button onClick={onStart} onMouseEnter={e=>e.currentTarget.style.opacity="0.85"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}
-        style={{ display: "block", width: "100%", padding: 16, background: PURPLE, border: "none", color: "#fff", fontSize: 14, letterSpacing: "0.2em", fontFamily: "monospace", cursor: "pointer", fontWeight: 700 }}>
-        ▶ EINSATZAKTE ÖFFNEN
-      </button>
-    </div>
-  );
-}
-
 // ─────────────────────────────────────────────
 //  MAIN APP
 // ─────────────────────────────────────────────
 function App() {
-  const [page, setPage]       = useState("mission");
+  const [page, setPage]       = useState("intro");
   const [active, setActive]   = useState(null);
   const [checked, setChecked] = useState(() => { const i={}; Object.keys(data).forEach(n=>{i[n]={}}); return i; });
 
   const toggle = (name,si,ii) => { const k=`${si}-${ii}`; setChecked(p=>({...p,[name]:{...p[name],[k]:!p[name][k]}})); };
   const getProgress = (name) => { let t=0,d=0; data[name].sections.forEach((s,si)=>s.items.forEach((_,ii)=>{t++;if(checked[name][`${si}-${ii}`])d++;})); return {total:t,done:d,pct:t?Math.round(d/t*100):0}; };
 
+  if (page==="intro") return <IntroScreen onAccept={()=>setPage("mission")} />;
   if (page==="mission") return <MissionPage onStart={()=>setPage("list")} />;
 
   const person   = active ? data[active] : null;
@@ -587,7 +758,7 @@ function App() {
             </div>
             <div style={{ fontSize:26, fontWeight:900, color:person.group==="eingeweiht"?"#90c0ff":ACCENT, fontFamily:"sans-serif" }}>{person.emoji} {person.label}</div>
             <div style={{ color:MUTED, fontSize:11, fontStyle:"italic", marginTop:4, marginBottom:12 }}>{person.deckname}</div>
-            <div style={{ color:"#8888aa", fontSize:12, lineHeight:1.7, borderLeft:`2px solid ${person.group==="eingeweiht"?"#60a0f0":PURPLE}`, paddingLeft:12 }}>{person.bio}</div>
+            <TypewriterText text={person.bio} speed={18} style={{ color:"#8888aa", fontSize:12, lineHeight:1.7, borderLeft:`2px solid ${person.group==="eingeweiht"?"#60a0f0":PURPLE}`, paddingLeft:12 }} />
           </div>
 
           <div style={{ marginBottom:12 }}>
@@ -622,6 +793,8 @@ function App() {
   );
 }
 
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
