@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>#BEST-Team goes ░░░░░░░░░</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0f; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+
+// PINs – bitte einzeln per WhatsApp verschicken!
+const PINS = {
+  jannik:  "1904",
+  maxi:    "2207",
+  leon:    "0303",
+  maya:    "1511",
+  emily:   "2809",
+  robert:  "3108",
+  luca:    "0507",
+  jule:    "1406",
+  alex:    "2210",
+};
+
+const ACCENT = "#f0c040";
+const PURPLE = "#7060f0";
+const GREEN  = "#22c97a";
+const RED    = "#b91c1c";
+const BG     = "#0a0a0f";
+const CARD   = "#111118";
+const BORDER = "#1e1e2e";
+const MUTED  = "#44445a";
+const TEXT   = "#ddddf0";
+
+const badgeStyle = {
+  "MUSS":       { background: RED,       color: "#fff" },
+  "FREMDPAKET": { background: "#7c3aed", color: "#fff" },
+  "TEAMGUT":    { background: "#1d4ed8", color: "#fff" },
+  "OPTIONAL":   { background: "#374151", color: "#fff" },
+  "EINGEWEIHT": { background: "#14532d", color: "#86efac" },
+};
+
+// ─────────────────────────────────────────────
+//  DATA
+// ─────────────────────────────────────────────
+const data = {
+
+  // ── NICHT EINGEWEIHT ──────────────────────
+
+  jannik: {
+    emoji: "🌀", label: "Jannik B.", group: "geheim",
+    deckname: "Deckname: Der Reiseleiter | Funktion: Chaos-Koordination | Sicherheitsstufe: UNBERECHENBAR",
+    bio: "Bekannt für: Reiseführung ohne Plan, Stripclub-Verweigerung (mündlich, nie schriftlich), Anführer der legendären Operation Malle. Snus-Versorgungsoffizier auf Lebenszeit. Beziehungsstatus: freie Wildbahn – und das aus voller Überzeugung.",
+    sections: [
+      { title: "🏕️ Pflicht – Kein Pack, kein Ticket", items: [
+        { name: "Isomatte", note: "Du schläfst irgendwo. Das Komitee garantiert nichts außer dem Boden.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Schlafsack bedeutet nicht zwingend Schlafen. Beides bleibt offen.", badge: "MUSS" },
+        { name: "Reisepass oder Personalausweis", note: "Kein Kommentar. Nur Nachdruck.", badge: "MUSS" },
+      ]},
+      { title: "🌀 Janniks persönliches Chaos-Kit", items: [
+        { name: "Snus-Monatsvorrat (für ein Wochenende)", note: "Für dich. Nur für dich. Teilen ist kein offizieller Bestandteil dieses Pakets." },
+        { name: "Trinktrichter (zusammenklappbar, diskret verstaubar)", note: "Der ursprüngliche Plan lautete: gemütlich. Der Trichter hatte andere Vorstellungen." },
+        { name: "Taschentücher für Maxi – eine Großpackung", note: "Maxi schnupft. Du weißt es. Pack sie ein. Es ist dein Beitrag zur Gruppengesundheit.", badge: "FREMDPAKET" },
+        { name: "Stadtplan einer völlig falschen Stadt", note: "Du wirst ihn rausziehen. Du wirst so tun als ob. Die Gruppe wird dir trotzdem folgen." },
+        { name: "Visitenkarten: Jannik B. – Reiseleiter", note: "Selbstbewusstsein ist die halbe Führungsarbeit. Die andere Hälfte ist Improvisation." },
+        { name: "Stripclub-Nein-Button (rot, mit Ton)", note: "Drück ihn. Überzeug dich selbst. Er hat nachweislich noch nie funktioniert." },
+        { name: "Schlafmaske (Totenkopfmotiv, lichtdicht)", note: "Für den Rückweg. Grund bekannt. Wird nicht weiter kommentiert." },
+        { name: "Voucher: Ich wars nicht – 5 Stück, laminiert", note: "Präventiv verpackt. Erfahrungsgemäß bis Samstag 14 Uhr vollständig verbraucht." },
+        { name: "Mini-Klappstuhl (für Führungsauftritte)", note: "Ein Reiseleiter sitzt. Alle anderen stehen. Das ist Hierarchie, kein Zufall." },
+        { name: "Trillerpfeife (besonders laut)", note: "Zur Gruppenkoordination. Wird missbräuchlich eingesetzt. Das ist bereits eingeplant." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Erinnerungsfoto",
+      items: [
+        { name: "Kleiner Bilderrahmen (Reiseformat, für 10x15)", note: "Vor Ort kaufen – Drogerie, Souvenirladen, egal. Hauptsache er passt ins Gepäck für den Rückweg." },
+        { name: "Gruppenfoto organisieren – eines das wirklich gut wird", note: "Nicht das verwackelte um Mitternacht. Ein echtes. Samstagabend, gute Stimmung, alle beisammen – du gibst das Kommando." },
+        { name: "Foto drucken lassen (Drogerie, Fotoautomat oder Hotel)", note: "Ins Netz gehen, nächste Filiale finden, ausdrucken. Du bist Reiseleiter – Logistik ist dein Fach." },
+        { name: "Foto einrahmen, Sonntagmorgen überreichen", note: "Keine große Rede nötig. Einfach auf den Tisch stellen. Der Moment spricht für sich." },
+      ],
+      warning: "Niemand darf vorher wissen, dass das geplant ist. Kein Labern, kein Andeuten, kein vielsagender Blick."
+    },
+    warning: "Diese Liste wurde ohne Janniks Wissen erstellt. Das Komitee übernimmt keine Haftung für Ausflüge, die er angeblich nie geplant hat."
+  },
+
+  maxi: {
+    emoji: "🎩", label: "Maxi L.", group: "geheim",
+    deckname: "Deckname: Der Kleine Boss | Funktion: Vorstand mit unbekannter Agenda | Sicherheitsstufe: UNDURCHSCHAUBAR",
+    bio: "Bekannt für: Stille Wasser, tiefe Geheimnisse und Schnupftabak in industriellen Mengen. Körpergröße: charmant kompakt – was an Höhe fehlt, steckt vollständig in Autorität. Vergeben. Sie weiß nichts von dieser Liste.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Auch Vorstände schlafen auf dem Boden. Das nennt sich Demokratie.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Wärmegrad angepasst an die Tiefe stiller Gewässer: unbekannt.", badge: "MUSS" },
+        { name: "Personalausweis oder Reisepass", note: "Gültig bitte. Einreise könnte tatsächlich geprüft werden.", badge: "MUSS" },
+      ]},
+      { title: "🎩 Maxis Vorstandsausrüstung", items: [
+        { name: "Schnupftabak (Doppelvorrat, sicherheitshalber)", note: "Jannik bringt Taschentücher. Du bringst den eigentlichen Inhalt. Das System läuft seit Jahren." },
+        { name: "Mini-Klappstuhl (für strategischen Überblick)", note: "Rein praktisch. Für Überblick und Autorität. Kein weiterer Kommentar." },
+        { name: "Notizbuch: Was ich weiß, aber nicht sage", note: "Stille Wasser. Tiefe Seiten. Du weißt Dinge. Für die Nachwelt aufschreiben." },
+        { name: "Stempel: Genehmigt – Vorstand", note: "Für Gruppenentscheidungen, Restaurantrechnungen und Aktionen mit fragwürdiger Grundlage." },
+        { name: "Schweigegeld-Münzen (vorzugsweise Fremdwährung)", note: "Was auf der Reise passiert, bleibt auf der Reise. Der Preis variiert je nach Zeugenanzahl." },
+        { name: "Polo-Shirt (Kragen bei Bedarf aufstellbar)", note: "Autorität muss gepflegt und sichtbar getragen werden." },
+        { name: "Gute Flasche Rotwein (für stille Momente)", note: "Für Situationen, die Tiefe verlangen. Oder einfach für Freitagabend." },
+        { name: "Schwarzes Notizheft (ohne Aufschrift)", note: "Was drin steht, weiß nur du. Das Komitee fragt nicht. Das Komitee respektiert das." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Ehrenurkunde",
+      items: [
+        { name: "Selbstgebastelte Urkunde: Bester Reiseleiter der Welt", note: "Für Jannik. Auf echtem Papier – mit Unterschrift und deinem Vorstandsstempel. Den hast du dabei." },
+        { name: "Goldener Aufkleber-Stern für die Urkunde", note: "Optisch unverzichtbar. Kaufhausqualität ist ausdrücklich erlaubt und sogar erwünscht." },
+        { name: "Feierliche Übergabe am Sonntagmorgen", note: "Wenn alle zusehen. Kurze Ansprache. Ernstes Gesicht. Du weißt, wie du das machst." },
+      ],
+      warning: "Jannik darf bis zur Übergabe nichts ahnen. Urkunde vorab fertigstellen – nicht im Zug basteln."
+    },
+    warning: "Maxi weiß vermutlich mehr als er sagt. Das ist kein Fehler – das ist sein Charakter."
+  },
+
+  leon: {
+    emoji: "😄", label: "Leon P.", group: "geheim",
+    deckname: "Deckname: Der Gemütliche | Funktion: 2. Vorstand | Bartwuchs: Projekt läuft, Ergebnis offen",
+    bio: "Bekannt für: Gemütlichkeit auf absolutem Profiniveau, echten Vibe und Herzlichkeit ohne Aufwand. Kein nennenswerter Bartwuchs – wir erwähnen es, weil er es hasst. Zweiter Vorstand mit Herz aus purem Gold.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Deine Gemütlichkeit macht den Boden physikalisch leider nicht weicher.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Komfort für Menschen mit ausgeprägtem Gespür für Komfort. Du qualifizierst eindeutig.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Sympathie allein reicht nicht als Einreisedokument.", badge: "MUSS" },
+      ]},
+      { title: "😄 Leons Gemütlichkeits-Arsenal", items: [
+        { name: "Bartwuchs-Booster-Serum (Apotheke genügt völlig)", note: "Das Projekt läuft. Die Genetik verhandelt noch. Das Serum hält die Hoffnung lebendig." },
+        { name: "Kuscheldecke (komprimierbar, Rucksackformat)", note: "Du bist ein Riesenbaby – das ist kein Vorwurf, das ist eine Beschreibung mit echter Zuneigung." },
+        { name: "Schnuller (ironisch verpackt, mit Schleifchen)", note: "Für den absoluten Notfall. Riesenbabys wollen versorgt werden.", badge: "OPTIONAL" },
+        { name: "Riesenportion Gummibärchen (mindestens 500g)", note: "Gemütlichkeit braucht Grundversorgung. Hunger ist kein Vibe." },
+        { name: "Aufblasbare Sitzunterlage für die Zugfahrt", note: "Komfort ist keine Schwäche. Komfort ist eine bewusste Lebenshaltung." },
+        { name: "Zweiter-Vorstand-Abzeichen (selbst laminiert)", note: "Damit man's weiß. Und damit Maxis Abzeichen im direkten Vergleich noch imposanter wirkt." },
+        { name: "Playlist: Gute Laune oder gar nichts", note: "Fertig kuratiert, geladen, Bluetooth-bereit. Wird ohne Vorwarnung aktiviert." },
+        { name: "Nackenkissen (Reiseformat, Einheitsgröße)", note: "Lange Fahrt. Dein Nacken hat das absolut verdient. Du auch." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Schnupftabak-Sabotage",
+      items: [
+        { name: "Kleine Dose Schnupftabak (Geschmack: exotisch, unbekannt)", note: "Heimlich in Maxis Vorrat einschmuggeln. Wird er es merken? Ja. Wann genau? Das ist die Kunst." },
+        { name: "Anonymes Kärtchen: Von einem Kenner für einen Kenner", note: "Handschrift verkleiden oder tippen. Maxi wird rätseln. Das ist vollständig der Sinn der Übung." },
+      ],
+      warning: "Maxi darf die Quelle niemals erfahren. Sollte er fragen: ruhig bleiben, freundlich schauen, Thema wechseln."
+    },
+    warning: "Leon ist der Vibe des Wochenendes. Das Komitee baut fest und ohne Vorbehalt auf ihn."
+  },
+
+  maya: {
+    emoji: "🔮", label: "Maya L.", group: "geheim",
+    deckname: "Deckname: Die kleine Gefahr | Funktion: Erste-Hilfe-Fee und heimliche Partymaschine",
+    bio: "Bekannt für: völlig unscheinbar aussehen und dann sämtliche Erwartungen in die Luft jagen. Schwester von Maxi – beide massiv unterschätzt. Vergeben. Medizinische Kenntnisse werden dieses Wochenende dringend gebraucht werden. Keine bekannten Suchtmittel – dafür umso mehr rohe Energie.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Auch Erste-Hilfe-Feen schlafen. Gelegentlich jedenfalls.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Wärme für diejenige, die alle anderen warm hält.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Ohne weiteren Kommentar. Mit vollem Nachdruck.", badge: "MUSS" },
+      ]},
+      { title: "🔮 Mayas Notfall- und Partykoffer", items: [
+        { name: "Erste-Hilfe-Set (vollständig, wirklich vollständig)", note: "Pflaster, Verbände, Ibuprofen in Mengen jenseits des Üblichen. Jannik kommt als Erster. Historisch belegt." },
+        { name: "Elektrolytpulver – mindestens 10 Beutel", note: "Für das gesamte Team. Sonntagmorgen. Die Menge ist kein Scherz, sondern reiner Erfahrungswert.", badge: "TEAMGUT" },
+        { name: "Wegwerfkamera (analog, 27 Aufnahmen)", note: "Für Momente, die im digitalen Raum besser nicht existieren sollten." },
+        { name: "Glow-Sticks – 10 Stück, gemischt", note: "Die ruhige Schwester. Bis die Musik angeht. Dann kennt die Gruppe dich nicht mehr." },
+        { name: "Taschentücher für Maxi (strategischer Backup-Vorrat)", note: "Jannik hat die offizielle Ration. Du hast die Reserve. Doppelt abgesichert.", badge: "FREMDPAKET" },
+        { name: "Geheimplaylist (fertig kuratiert, kein Vorhören)", note: "Vorbereitet. Geladen. Wartet geduldig auf den exakt richtigen Moment." },
+        { name: "Ohrstöpsel (für den Moment nach dem Party-Modus)", note: "Du weißt wie es endet. Du bist vorbereitet. Das nennt sich echte Weitsicht." },
+        { name: "Thermoskanne (1 Liter, für Tee am Morgen)", note: "Sonntagfrüh. Du wirst die stille Heldin des Wochenendes sein. Das steht bereits fest." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Stille Geste",
+      items: [
+        { name: "Handgeschriebene Karte für Emily: Du bist die Beste von uns", note: "In Emilys Rucksack-Außentasche legen, bevor die Heimreise beginnt. Kein Absender drauf." },
+        { name: "Kleine Tüte vegane Gummibärchen als Beilage", note: "Emily verzichtet auf Vieles dieses Wochenende. Auf das hier muss sie nicht verzichten." },
+      ],
+      warning: "Emily findet die Karte erst auf der Heimreise. Nicht früher. Das Timing entscheidet über alles."
+    },
+    warning: "Das Komitee vertraut vollständig darauf, dass Maya das Team am Leben erhält. Wirklich kein Druck."
+  },
+
+  emily: {
+    emoji: "🌿", label: "Emily S.", group: "geheim",
+    deckname: "Deckname: Die Vernunft | Funktion: Moralischer Anker und stille Gruppenretterin",
+    bio: "Bekannt für: Vernunft – in der Theorie solide verankert. Aktuell auf No-Alk- und Vegetarismus-Trip. War in Malle als Erste beim Nacktbaden (kein weiterer Kommentar). Jüngste im Team. Gute Seele mit erkennbar rebellischer Ader.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Auch die Vernunft braucht Schlaf. Manchmal sogar mehr als alle anderen.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Kuschelig, vegan, ohne Zusatzstoffe, kein Alkohol enthalten.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Die Vernunft hat ihre Dokumente immer dabei. Das Komitee weiß das.", badge: "MUSS" },
+      ]},
+      { title: "🌿 Emilys Ich-bin-vernünftig-Paket", items: [
+        { name: "Alkoholfreier Sekt – 1 Flasche, ordentliche Qualität", note: "Zum Anstoßen. Ohne schlechtes Gewissen. Du feierst genauso mit – nur deutlich klarer." },
+        { name: "Vegane Reisesnacks (Menge: deutlich zu viel)", note: "Die anderen essen irgendwas Fragwürdiges. Du hast vorgesorgt. Das nennt sich Strategie." },
+        { name: "Badeanzug (sicherheitshalber, ohne Hintergedanken)", note: "Nur für Schwimmbäder natürlich. Was in Malle passiert ist, ist nicht Gegenstand dieser Liste." },
+        { name: "Laminierte Nein-danke-Karte (doppelseitig)", note: "Für Angebote aller Art. Wird mit Würde präsentiert. Wird von der Gruppe herzlich ignoriert." },
+        { name: "Sonnencreme LSF 50+ (vegan zertifiziert)", note: "Wozu genau – wird vor Ort klar. Einfach einpacken." },
+        { name: "Tagebuch: Was ich diesmal wirklich nicht tue", note: "Für die Liste der guten Vorsätze. Sorgfältig geführt. Enthusiastisch unterschritten." },
+        { name: "Vegane Notfallschokolade (dunkel, 70% aufwärts)", note: "Für Momente, in denen die Vernunft kurz Pause macht. Die kommen. Immer." },
+        { name: "Kerze (Duftrichtung: Beherrschung)", note: "Existiert nicht als echtes Produkt. Steht trotzdem auf der Liste. Das Komitee ist kreativ." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Vernunft-Bingo",
+      items: [
+        { name: "Bingo-Karte erstellen: Die Gruppe heute Abend", note: "Vor der Reise ausfüllen: Felder wie 'Jannik benutzt den Trichter', 'Maxi zieht schweigend einen Zettel raus', 'Leon schläft als Erster ein', 'Jule tanzt auf irgendetwas'. Eine Karte pro eingeweihter Person." },
+        { name: "Karten heimlich an Robert, Luca, Jule und Alex verteilen", note: "Vorab per WhatsApp verschicken. Alle spielen still mit. Niemand redet drüber. Wer Bingo hat, sagt nur leise 'Vernunft' – das ist das Codewort." },
+        { name: "Kleiner Preis für den Gewinner einpacken", note: "Schokolade, Gummibärchen, Pflaster mit Herzchen – egal was. Hauptsache es gibt einen symbolischen Gewinn." },
+      ],
+      warning: "Die nicht Eingeweihten dürfen nie von diesem Bingo erfahren. Codewort: Vernunft. Kein Lachen wenn jemand es sagt."
+    },
+    warning: "Emily ist die Vernunft der Gruppe. Das Komitee wünscht ihr aufrichtig und von Herzen viel Erfolg dabei."
+  },
+
+  // ── EINGEWEIHT ────────────────────────────
+
+  robert: {
+    emoji: "🚒", label: "Robert H.", group: "eingeweiht",
+    deckname: "Deckname: Der echte Reiseleiter | Funktion: Backup-Kommandant & IT-Notfallservice | Alter: 31 (Gruppenältester, trägt es mit Würde)",
+    bio: "Bekannt für: Unterkunft gebucht – oder auch nicht, das bleibt vorerst offen. Ehemaliger 1. Vorstand (8 Jahre), Feuerwehrkommandant und IT-ler in Personalunion. Übernimmt die Reiseleitung sobald Jannik den Trichter zu oft benutzt hat. Glücklicher Single. Der ruhige Pol mit dem größten Überblick.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Du hast die Unterkunft gebucht. Vielleicht. Zur Sicherheit trotzdem einpacken.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Kommandanten schlafen immer mit einem Ohr offen. Der Schlafsack hilft.", badge: "MUSS" },
+        { name: "Reisepass oder Personalausweis", note: "Du weißt wohin es geht. Du weißt warum du ihn brauchst.", badge: "MUSS" },
+      ]},
+      { title: "🚒 Roberts Kommandanten-Ausrüstung", items: [
+        { name: "Buchungsbestätigung (ausgedruckt UND digital)", note: "Feuerwehrkommandant plant doppelt. Einmal reicht nie." },
+        { name: "Backup-Powerbank (groß, für alle)", note: "IT-ler reisen nicht ohne Strom. Und die anderen werden dich anflehen.", badge: "TEAMGUT" },
+        { name: "Geheime Stadtführung (selbst recherchiert)", note: "Du weißt wo es hingeht. Nutze den Vorsprung. Überrasch die Gruppe mit einem guten Tipp." },
+        { name: "Feuerwehr-Ehrennadel (für moralische Autorität)", note: "Nicht offiziell auf der Packliste. Aber du weißt, dass sie hilft." },
+        { name: "Ibuprofen-Großpackung (als 1. Vorstand im Ruhestand)", note: "8 Jahre Vorstandserfahrung lehren: immer Schmerzmittel dabei haben.", badge: "TEAMGUT" },
+        { name: "Formular: Übergabe der Reiseleitung an Robert", note: "Für den Moment, wenn Jannik ausfällt. Vorausgefüllt. Nur noch unterschreiben." },
+        { name: "Notfall-Snacks (für den IT-Notfall-Modus)", note: "Wenn jemand fragt ob du mal kurz aufs Handy schauen kannst: Snack raus, Problem lösen, weiterfeiern." },
+        { name: "Würfelbecher (für unentschiedene Gruppensituationen)", note: "Wenn alle gleichzeitig reden und niemand entscheidet – du entscheidest. Mit Würfeln." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Stille Übernahme",
+      items: [
+        { name: "Geheimes Alternativprogramm für Sonntagvormittag", note: "Überrasch die Gruppe mit einem lokalen Geheimtipp – du kennst die Stadt. Einfach losgehen und alle mitziehen." },
+        { name: "Gruppen-Erinnerungskarte selbst beschriften", note: "Alle sollen unterschreiben – koordiniere das still mit den anderen Eingeweihten. Als Abschluss-Geste für alle." },
+      ],
+      warning: "Du bist der älteste und erfahrenste. Das Komitee verlässt sich auf dich wenn es drauf ankommt."
+    },
+    warning: "Robert weiß wo es hingeht. Robert hat gebucht. Wahrscheinlich."
+  },
+
+  luca: {
+    emoji: "🏠", label: "Luca P.", group: "eingeweiht",
+    deckname: "Deckname: Der Riese | Funktion: Ehemaliger Kassier · Familienmensch mit Ausgang | Körpergröße: beeindruckend",
+    bio: "Bekannt für: Sehr groß, sehr breit, sehr zuverlässig. Bruder von Leon – die Gene verteilen sich halt unterschiedlich. Frau und Kind seit gefühlt immer. Eigenes Haus seit kurzem. In Malle als erster aufs Zimmer. Merkt langsam, dass Feiern Substanz kostet. Das Wochenende wird ihn trotzdem erwischen.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Extrabreite empfohlen. Die Standardgröße kennt deine Dimensionen nicht.", badge: "MUSS" },
+        { name: "Schlafsack (Übergröße falls vorhanden)", note: "Komfort ist auch für große Menschen ein Grundrecht.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Du weißt wo es hingeht. Trotzdem einpacken.", badge: "MUSS" },
+      ]},
+      { title: "🏠 Lucas Familienvater-auf-Ausgang-Kit", items: [
+        { name: "Foto von Frau und Kind (fürs Portemonnaie)", note: "Damit du weißt warum du Sonntag früh wieder nüchtern sein willst." },
+        { name: "Schlafmaske (lichtdicht, Doppelschicht)", note: "In Malle warst du als erster auf dem Zimmer. Die Erfahrung sitzt. Die Augen auch." },
+        { name: "Ohrstöpsel (Industriequalität)", note: "Jannik schnarcht. Das ist keine Vermutung, das ist eine Prognose." },
+        { name: "Vitaminpräparate (Brausetabletten, Großpackung)", note: "Der Körper erinnert sich an früher. Der Geist will noch. Die Brausetablette vermittelt." },
+        { name: "Hausschuhe (für den schnellen Zimmerrückzug)", note: "Erfahrung aus Malle: wenn es Zeit ist zu gehen, will man schnell gehen." },
+        { name: "Gummibärchen von Leons Vorrat stehlen", note: "Er hat mindestens 500g dabei. Er wird es nicht merken. Du weißt das.", badge: "OPTIONAL" },
+        { name: "Notiz: Ich bin morgen wieder zuhause", note: "Für dich selbst. Als Motivation. Als Versprechen. Als Erinnerung." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Großer Bruder",
+      items: [
+        { name: "Kleines Mitbringsel für dein Kind von der Reise", note: "Magnet, Kühlschrankaufkleber, irgendwas mit Stadtmotiv. Du weißt, wie groß das Leuchten in den Augen wird." },
+        { name: "Geheimen Abend-Tipp an Leon weitergeben", note: "Du kennst ihn am besten. Wenn er zu lang aufbleibt und es ihm nicht gut tut – ein Blick reicht. Großes Bruder-Privileg." },
+      ],
+      warning: "Du bist der große Bruder. Manchmal reicht wirklich ein Blick."
+    },
+    warning: "Luca ist das ruhige Gewissen der Gruppe. Und der einzige, der garantiert pünktlich auf dem Zimmer ist."
+  },
+
+  jule: {
+    emoji: "🎉", label: "Jule L.", group: "eingeweiht",
+    deckname: "Deckname: Die Allzweckwaffe | Funktion: Ehemalige Social-Media-Beauftragte · Hortfachkraft · Partywildcard",
+    bio: "Bekannt für: Bei jedem Spaß dabei, immer. Eigenes Haus seit kurzem, seit letztem Jahr verheiratet. Arbeitet mit Kindern – was die Toleranzschwelle für Chaos nachweislich erhöht. Trinkt gerne viel und wird dann putzig auf eine Weise, die niemanden stört und alle entzückt.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Auch wer immer dabei ist, braucht irgendwann einen Platz zum Liegen.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Für die Stunden zwischen Party und Frühstück.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Du weißt wohin es geht. Pack ihn trotzdem bewusst ein.", badge: "MUSS" },
+      ]},
+      { title: "🎉 Jules Allround-Ausrüstung", items: [
+        { name: "Sofortbild-Kamera oder Fotoapp mit Druckfunktion", note: "Du warst Social-Media-Beauftragte. Das Dokumentieren sitzt in den Knochen." },
+        { name: "Propskiste (Partyhüte, Sonnenbrillen, Schnurrbart-Sticker)", note: "Für Fotos, die in zehn Jahren noch lustig sind. Oder peinlich. Beides zählt." },
+        { name: "Trinkspiel-Karten (reisefertig, wasserfest)", note: "Nur zur Sicherheit. Für den Fall, dass jemand Struktur braucht." },
+        { name: "Großes Tuch / Pareo (Multifunktional)", note: "Decke, Sitzmatte, Verkleidung, Flagge – du findest den Einsatz." },
+        { name: "Kindersicherheits-Reflex ausschalten (für das Wochenende)", note: "Du arbeitest mit Kindern. Die Gruppe ist keine Kindergruppe. Meistens.", badge: "OPTIONAL" },
+        { name: "Wasserflaschen-Aufkleber: Jule's Flasche – Finger weg", note: "Präventiv. Mit Kindern arbeiten lehrt: beschriften hilft." },
+        { name: "Playlist: Hort-Hits die niemand kennen soll", note: "Du hörst sie heimlich. Irgendwann läuft sie versehentlich. Das wird unvergesslich." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Gruppen-Content",
+      items: [
+        { name: "Geheimes Gruppen-Reels oder Fotocollage erstellen", note: "Du bist die ehemalige Social-Media-Beauftragte. Das ist dein Moment. Samstagabend sammeln, Sonntagmorgen zeigen." },
+        { name: "Alle heimlich beim Schlafen fotografieren (PG-rated)", note: "Für die Gruppe. Für die Ewigkeit. Mit Anstand. Aber mit Humor." },
+      ],
+      warning: "Der Content bleibt in der Gruppe. Kein öffentliches Posting ohne Absprache – du kennst die Regeln."
+    },
+    warning: "Jule ist der Treibstoff des Wochenendes. Wenn Jule tanzt, tanzt die ganze Gruppe."
+  },
+
+  alex: {
+    emoji: "🎺", label: "Alex H.", group: "eingeweiht",
+    deckname: "Deckname: Die Kichererbse | Funktion: Ehemaliger 2. Vorstand · Sportass · Partyband-Frontmann",
+    bio: "Bekannt für: Halbmarathons, Musikkapelle, Partyband und ein Lachen das Räume füllt. Wäre lieber in eine kleine deutsche Stadt gefahren – wurde überstimmt, nimmt es mit Humor. War 2. Vorstand unter Robert. Lässt keine sportliche Herausforderung aus und trägt das mit derselben Energie wie seine beste Bühnenshow.",
+    sections: [
+      { title: "🏕️ Pflicht", items: [
+        { name: "Isomatte", note: "Auch Sportler schlafen. Manchmal sogar gerne.", badge: "MUSS" },
+        { name: "Schlafsack", note: "Regeneration ist Teil des Trainingsplans. Offiziell.", badge: "MUSS" },
+        { name: "Ausweis oder Reisepass", note: "Du weißt wohin es geht. Du wolltest woanders hin. Du bist trotzdem dabei. Respekt.", badge: "MUSS" },
+      ]},
+      { title: "🎺 Alexs Sport-und-Spaß-Koffer", items: [
+        { name: "Laufschuhe (für den Sonntagmorgen-Pflichtlauf)", note: "Du wirst um 7 Uhr laufen. Alle anderen schlafen. Du kommst um 8 zurück. Alle hassen dich kurz. Dann lieben sie dich wieder." },
+        { name: "Laufstrecken-Recherche (Zielort ist bekannt, nutze den Vorsprung)", note: "GPX-Route vorbereiten. Strecke scouten. Du bist der Einzige der das ernst nimmt." },
+        { name: "Mini-Instrument oder Mundharmonika", note: "Für spontane Einlagen. Partyband-Reflexe lassen sich nicht abschalten." },
+        { name: "Setlist der Partyband (für Karaoke-Notfälle)", note: "Wenn die Stimmung kippt, weißt du was zu tun ist. Das ist eine Superkraft." },
+        { name: "Sportgetränkepulver (wegen: Lauf am Morgen)", note: "Der einzige in der Gruppe mit einem strukturierten Ernährungsplan. Auch am Wochenende.", badge: "OPTIONAL" },
+        { name: "T-Shirt: Ich wollte eigentlich nach Deutschland", note: "Kein echtes T-Shirt. Aber die Energie davon solltest du einpacken. Mit Humor." },
+        { name: "Kichererbsen-Dose (symbolisch, für den Spitznamen)", note: "Einmal rausholen. Alle lachen. Dose wieder einpacken. Mission erfüllt." },
+      ]},
+    ],
+    secret: {
+      title: "Operation: Spontankonzert",
+      items: [
+        { name: "1-2 Songs einüben die zur Gruppe passen", note: "Samstagabend, wenn die Stimmung am besten ist – kurze Spontaneinlage. Unplugged, unangekündigt, unvergesslich." },
+        { name: "Robert vorher einweihen für den richtigen Moment", note: "Robert gibt das Zeichen. Du lieferst den Auftritt. Das ist Teamwork auf höchstem Niveau." },
+      ],
+      warning: "Keiner darf vorher wissen, dass das geplant ist. Spontan ist nur gut wenn es wirklich überrascht."
+    },
+    warning: "Alex wollte nach Deutschland. Alex ist trotzdem dabei. Alex wird der Beste auf dem Foto sein."
+  },
+
+};
+
+// ─────────────────────────────────────────────
+//  COMPONENTS
+// ─────────────────────────────────────────────
+
+function CheckItem({ item, checked, onToggle }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <div onClick={onToggle} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "11px 16px", borderBottom: `1px solid ${BORDER}`, cursor: "pointer", userSelect: "none", background: hover ? "rgba(255,255,255,0.025)" : "transparent", transition: "background 0.1s" }}>
+      <div style={{ width: 15, height: 15, flexShrink: 0, marginTop: 3, border: `1px solid ${checked ? "#2a8a4a" : MUTED}`, background: checked ? "#2a8a4a" : "transparent", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "#fff", fontWeight: 900, transition: "all 0.15s" }}>
+        {checked ? "✓" : ""}
+      </div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 13, color: checked ? MUTED : TEXT, textDecoration: checked ? "line-through" : "none", lineHeight: 1.45 }}>{item.name}</div>
+        <div style={{ fontSize: 11, color: MUTED, fontStyle: "italic", marginTop: 3, lineHeight: 1.45 }}>{item.note}</div>
+      </div>
+      {item.badge && <div style={{ fontSize: 10, padding: "2px 7px", flexShrink: 0, alignSelf: "center", letterSpacing: "0.08em", fontFamily: "monospace", ...badgeStyle[item.badge] }}>{item.badge}</div>}
+    </div>
+  );
+}
+
+function SecretSection({ secret, pin }) {
+  const [open, setOpen]         = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
+  const [val, setVal]           = useState("");
+  const [err, setErr]           = useState(false);
+  const [shake, setShake]       = useState(false);
+
+  const tryPin = (input) => {
+    if (input === pin) { setUnlocked(true); }
+    else { setErr(true); setShake(true); setVal(""); setTimeout(() => setShake(false), 500); }
+  };
+
+  if (!open) return (
+    <div onClick={() => setOpen(true)} style={{ border: `1px dashed ${PURPLE}`, background: CARD, marginTop: 12, padding: "14px 16px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ fontSize: 24 }}>🔐</div>
+      <div>
+        <div style={{ fontSize: 12, color: PURPLE, letterSpacing: "0.15em" }}>GEHEIMAUFTRAG VERFÜGBAR</div>
+        <div style={{ fontSize: 11, color: MUTED, marginTop: 3 }}>Nur du darfst das sehen · Persönlicher PIN · Antippen zum Öffnen</div>
+      </div>
+    </div>
+  );
+
+  if (!unlocked) return (
+    <div style={{ border: `1px solid ${PURPLE}`, background: CARD, marginTop: 12 }}>
+      <div style={{ background: "#140f28", padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: PURPLE }}>🔐 GEHEIMAUFTRAG · PERSÖNLICHEN PIN EINGEBEN</div>
+      <div style={{ padding: "20px 16px", textAlign: "center" }}>
+        <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.12em", marginBottom: 16 }}>Deinen persönlichen Code eingeben</div>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12, transform: shake ? "translateX(5px)" : "none", transition: "transform 0.08s" }}>
+          {[0,1,2,3].map(i => (
+            <div key={i} style={{ width: 42, height: 50, border: `1px solid ${err ? RED : val.length > i ? ACCENT : BORDER}`, background: "#0d0d18", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, color: ACCENT, fontFamily: "monospace", transition: "border-color 0.2s" }}>
+              {val.length > i ? "●" : ""}
+            </div>
+          ))}
+        </div>
+        {err && <div style={{ fontSize: 11, color: RED, marginBottom: 12, letterSpacing: "0.1em" }}>FALSCHER CODE – ZUGRIFF VERWEIGERT</div>}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 52px)", gap: 8, justifyContent: "center" }}>
+          {["1","2","3","4","5","6","7","8","9","⌫","0","✓"].map(k => (
+            <button key={k} onClick={() => {
+              if (k === "⌫") { setVal(v => v.slice(0,-1)); setErr(false); }
+              else if (k === "✓") { tryPin(val); }
+              else if (val.length < 4) { const nv = val+k; setVal(nv); setErr(false); if (nv.length===4) setTimeout(()=>tryPin(nv),120); }
+            }} style={{ width: 52, height: 52, background: k==="✓" ? PURPLE : "#0d0d18", border: `1px solid ${k==="✓" ? PURPLE : BORDER}`, color: TEXT, fontSize: k==="⌫" ? 16 : 20, fontFamily: "monospace", cursor: "pointer" }}>{k}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ border: `1px solid ${PURPLE}`, background: CARD, marginTop: 12 }}>
+      <div style={{ background: "#140f28", padding: "8px 16px", fontSize: 11, letterSpacing: "0.15em", color: "#a080ff" }}>✅ GEHEIMAUFTRAG FREIGESCHALTET: {secret.title.toUpperCase()}</div>
+      {secret.items.map((item, i) => (
+        <div key={i} style={{ padding: "12px 16px", borderBottom: i < secret.items.length-1 ? `1px solid ${BORDER}` : "none" }}>
+          <div style={{ fontSize: 13, color: "#c0b0ff", lineHeight: 1.45 }}>🎯 {item.name}</div>
+          <div style={{ fontSize: 11, color: MUTED, fontStyle: "italic", marginTop: 4, lineHeight: 1.45 }}>{item.note}</div>
+        </div>
+      ))}
+      <div style={{ padding: "10px 16px", background: "#1a1030", fontSize: 11, color: "#aa88ff", borderTop: "1px solid #2a1060" }}>⚠️ {secret.warning}</div>
+    </div>
+  );
+}
+
+function MissionPage({ onStart }) {
+  const [visible, setVisible] = useState(0);
+  const lines = ["VERSCHLÜSSELTE NACHRICHT EMPFANGEN...","ABSENDER: UNBEKANNT","ENTSCHLÜSSELUNG LÄUFT...","ZUGRIFF GEWÄHRT."];
+  useState(() => { lines.forEach((_,i) => setTimeout(()=>setVisible(i+1), i*750)); });
+
+  return (
+    <div style={{ background: BG, minHeight: "100vh", fontFamily: "monospace", color: TEXT, padding: "32px 20px 64px", maxWidth: 700, margin: "0 auto" }}>
+      <div style={{ marginBottom: 28, minHeight: 88 }}>
+        {lines.slice(0,visible).map((l,i) => (
+          <div key={i} style={{ fontSize: 11, color: i===visible-1 ? ACCENT : MUTED, letterSpacing: "0.15em", marginBottom: 6 }}>&gt; {l}</div>
+        ))}
+      </div>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <div style={{ display: "inline-block", background: RED, color: "#fff", fontSize: 11, letterSpacing: "0.3em", padding: "4px 16px", marginBottom: 16, transform: "rotate(-1deg)" }}>OPERATION #BEST-TEAM · STRENG GEHEIM</div>
+        <div style={{ fontSize: "clamp(2.5rem,10vw,4.5rem)", fontWeight: 900, color: ACCENT, lineHeight: 1, fontFamily: "sans-serif" }}>#BEST-Team</div>
+        <div style={{ fontSize: "clamp(1.4rem,6vw,2.5rem)", fontWeight: 900, color: PURPLE, fontFamily: "sans-serif", marginBottom: 6 }}>goes ░░░░░░░░░</div>
+        <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.2em" }}>DESTINATION: ████████ · ABREISE: BALD™</div>
+      </div>
+      <div style={{ borderTop: `1px solid ${BORDER}`, margin: "24px 0" }} />
+
+      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>📋 MISSIONSBRIEFING</div>
+        <div style={{ padding: 16, fontSize: 13, color: "#9999bb", lineHeight: 2 }}>
+          Agent/in,<br /><br />
+          du hältst gerade das einzige Dokument in Händen, das zwischen einem legendären Wochenende und totaler Gepäck-Katastrophe steht.<br /><br />
+          Das <strong style={{ color: TEXT }}>Geheimkomitee</strong> hat deine persönliche Einsatzakte zusammengestellt – basierend auf deiner Persönlichkeit, deiner Reisehistorie und einem Algorithmus, der nach mehrfacher interner Prüfung noch immer keinen vollständigen Sinn ergibt.<br /><br />
+          Die <strong style={{ color: TEXT }}>Destination</strong> ist für einen Teil des Teams bis zur Ankunft vollständig klassifiziert. Spekulationen werden aktiv demontiert. Fragen werden nicht beantwortet.<br /><br />
+          Jede Akte enthält außerdem einen <strong style={{ color: PURPLE }}>persönlichen Geheimauftrag</strong> – gesichert durch deinen individuellen PIN. Nur du kennst ihn. Nur du darfst ihn sehen.<br /><br />
+          Deine Aufgabe: Pack. Erscheine pünktlich. Bring keine übermäßige Vernunft mit – es sei denn, du heißt Emily.
+        </div>
+      </div>
+
+      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>⚖️ OPERATIVE GRUNDREGELN</div>
+        {[
+          ["§1","Isomatte und Schlafsack sind Pflicht. Kein Verhandlungsspielraum. Keine Ausnahmen."],
+          ["§2","Reisepass oder Personalausweis ist einzupacken. Der Grund wird spätestens vor Ort klar."],
+          ["§3","Was auf der Reise passiert, bleibt auf der Reise. Maxi verfügt über Schweigegeld in Fremdwährung."],
+          ["§4","Jede Akte enthält einen Geheimauftrag mit persönlichem PIN. Nicht teilen, nicht zeigen, nicht andeuten."],
+          ["§5","Das Komitee behält sich vor, alle Ereignisse im Nachhinein als vollständig geplant darzustellen."],
+          ["§6","Jannik führt die Gruppe. Robert führt, wenn Jannik ausfällt. Die Gruppe überlebt das."],
+        ].map(([n,t]) => (
+          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12 }}>
+            <span style={{ color: RED, fontWeight: 700, flexShrink: 0, fontSize: 12 }}>{n}</span>
+            <span style={{ fontSize: 12, color: MUTED, lineHeight: 1.6 }}>{t}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>👥 EINSATZTEAM – VOLLSTÄNDIGE ÜBERSICHT</div>
+        <div style={{ padding: "6px 16px", background: "#0f1f0f", fontSize: 10, color: GREEN, letterSpacing: "0.15em" }}>● NICHT EINGEWEIHT</div>
+        {[
+          ["🌀","Jannik B.","Reiseleiter · Chaos-Offizier · Snus-Depot auf zwei Beinen"],
+          ["🎩","Maxi L.","Vorstand · Stille Wasser · Schnupftabak-Connaisseur"],
+          ["😄","Leon P.","2. Vorstand · Gemütlichkeits-Beauftragter · Bartwuchs: in Verhandlung"],
+          ["🔮","Maya L.","Erste-Hilfe-Fee · Geheime Partymaschine · Maxis Schwester"],
+          ["🌿","Emily S.","Die Vernunft · Jüngste · No-Alk-Aktivistin (Stand: aktuell)"],
+        ].map(([e,n,r]) => (
+          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
+            <span style={{ fontSize: 18, flexShrink: 0 }}>{e}</span>
+            <div><div style={{ fontSize: 13, color: TEXT }}>{n}</div><div style={{ fontSize: 11, color: MUTED }}>{r}</div></div>
+          </div>
+        ))}
+        <div style={{ padding: "6px 16px", background: "#0f1a2f", fontSize: 10, color: "#60a0f0", letterSpacing: "0.15em" }}>● EINGEWEIHT</div>
+        {[
+          ["🚒","Robert H.","Backup-Reiseleiter · Ehem. 1. Vorstand · Feuerwehrkommandant · IT-ler"],
+          ["🏠","Luca P.","Ehem. Kassier · Familienmensch auf Ausgang · Leons großer Bruder"],
+          ["🎉","Jule L.","Ehemalige Social-Media · Hortfachkraft · Partywildcard"],
+          ["🎺","Alex H.","Ehem. 2. Vorstand · Halbmarathonläufer · Partyband-Frontmann · Kichererbse"],
+        ].map(([e,n,r]) => (
+          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
+            <span style={{ fontSize: 18, flexShrink: 0 }}>{e}</span>
+            <div>
+              <div style={{ fontSize: 13, color: TEXT, display: "flex", alignItems: "center", gap: 8 }}>{n} <span style={{ fontSize: 9, background: "#14532d", color: "#86efac", padding: "1px 6px", letterSpacing: "0.1em" }}>EINGEWEIHT</span></div>
+              <div style={{ fontSize: 11, color: MUTED }}>{r}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button onClick={onStart} onMouseEnter={e=>e.currentTarget.style.opacity="0.85"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}
+        style={{ display: "block", width: "100%", padding: 16, background: PURPLE, border: "none", color: "#fff", fontSize: 14, letterSpacing: "0.2em", fontFamily: "monospace", cursor: "pointer", fontWeight: 700 }}>
+        ▶ EINSATZAKTE ÖFFNEN
+      </button>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+//  MAIN APP
+// ─────────────────────────────────────────────
+function App() {
+  const [page, setPage]       = useState("mission");
+  const [active, setActive]   = useState(null);
+  const [checked, setChecked] = useState(() => { const i={}; Object.keys(data).forEach(n=>{i[n]={}}); return i; });
+
+  const toggle = (name,si,ii) => { const k=`${si}-${ii}`; setChecked(p=>({...p,[name]:{...p[name],[k]:!p[name][k]}})); };
+  const getProgress = (name) => { let t=0,d=0; data[name].sections.forEach((s,si)=>s.items.forEach((_,ii)=>{t++;if(checked[name][`${si}-${ii}`])d++;})); return {total:t,done:d,pct:t?Math.round(d/t*100):0}; };
+
+  if (page==="mission") return <MissionPage onStart={()=>setPage("list")} />;
+
+  const person   = active ? data[active] : null;
+  const progress = active ? getProgress(active) : null;
+  const geheimKeys    = Object.keys(data).filter(k=>data[k].group==="geheim");
+  const eingeweihtKeys = Object.keys(data).filter(k=>data[k].group==="eingeweiht");
+
+  return (
+    <div style={{ background: BG, minHeight: "100vh", fontFamily: "monospace", color: TEXT, padding: "24px 16px 64px" }}>
+      <div style={{ textAlign: "center", marginBottom: 20 }}>
+        <div style={{ fontSize: "clamp(1.8rem,7vw,3rem)", fontWeight: 900, color: ACCENT, fontFamily: "sans-serif", lineHeight: 1 }}>#BEST-Team</div>
+        <div style={{ fontSize: "clamp(1rem,4vw,1.6rem)", fontWeight: 900, color: PURPLE, fontFamily: "sans-serif", marginBottom: 4 }}>goes ░░░░░░░░░</div>
+        <div style={{ fontSize: 10, color: MUTED, letterSpacing: "0.2em", marginBottom: 10 }}>PACKLISTEN-BRIEFING · DESTINATION: ████████</div>
+        <button onClick={()=>setPage("mission")} style={{ background: "transparent", border: `1px solid ${BORDER}`, color: MUTED, fontSize: 10, padding: "4px 12px", cursor: "pointer", fontFamily: "monospace", letterSpacing: "0.1em" }}>← ZURÜCK ZUR MISSION</button>
+      </div>
+
+      {/* Tab groups */}
+      <div style={{ maxWidth: 700, margin: "0 auto 24px" }}>
+        <div style={{ fontSize: 10, color: MUTED, letterSpacing: "0.2em", marginBottom: 6, paddingLeft: 2 }}>● NICHT EINGEWEIHT</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+          {geheimKeys.map(n => (
+            <button key={n} onClick={()=>setActive(n)} style={{ fontFamily:"monospace", fontSize:11, letterSpacing:"0.1em", textTransform:"uppercase", padding:"7px 13px", border:`1px solid ${active===n?PURPLE:BORDER}`, background:active===n?PURPLE:CARD, color:active===n?"#fff":MUTED, cursor:"pointer", transition:"all 0.15s" }}>
+              {data[n].emoji} {data[n].label}
+            </button>
+          ))}
+        </div>
+        <div style={{ fontSize: 10, color: "#60a0f0", letterSpacing: "0.2em", marginBottom: 6, paddingLeft: 2 }}>● EINGEWEIHT</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {eingeweihtKeys.map(n => (
+            <button key={n} onClick={()=>setActive(n)} style={{ fontFamily:"monospace", fontSize:11, letterSpacing:"0.1em", textTransform:"uppercase", padding:"7px 13px", border:`1px solid ${active===n?"#60a0f0":BORDER}`, background:active===n?"#1d3a6a":CARD, color:active===n?"#90c0ff":MUTED, cursor:"pointer", transition:"all 0.15s" }}>
+              {data[n].emoji} {data[n].label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {!active && (
+        <div style={{ textAlign:"center", padding:"48px 16px", color:MUTED, fontSize:12, letterSpacing:"0.1em", lineHeight:2.5 }}>
+          <div style={{ fontSize:36, marginBottom:8 }}>☝️</div>
+          Akte auswählen, um Briefing zu öffnen.<br />
+          <span style={{ fontSize:10, opacity:0.4 }}>Unbefugter Zugriff wird mit Mittelgang-Sitzplatz geahndet.</span>
+        </div>
+      )}
+
+      {active && person && (
+        <div style={{ maxWidth: 640, margin: "0 auto" }}>
+          <div style={{ border:`1px solid ${person.group==="eingeweiht"?"#60a0f0":ACCENT}`, background:CARD, padding:20, marginBottom:14, position:"relative" }}>
+            <div style={{ position:"absolute", top:-1, right:14, background:person.group==="eingeweiht"?"#1d4ed8":RED, color:"#fff", fontSize:9, letterSpacing:"0.15em", padding:"2px 8px" }}>
+              {person.group==="eingeweiht"?"EINGEWEIHT":"GEHEIMAKTE"}
+            </div>
+            <div style={{ fontSize:26, fontWeight:900, color:person.group==="eingeweiht"?"#90c0ff":ACCENT, fontFamily:"sans-serif" }}>{person.emoji} {person.label}</div>
+            <div style={{ color:MUTED, fontSize:11, fontStyle:"italic", marginTop:4, marginBottom:12 }}>{person.deckname}</div>
+            <div style={{ color:"#8888aa", fontSize:12, lineHeight:1.7, borderLeft:`2px solid ${person.group==="eingeweiht"?"#60a0f0":PURPLE}`, paddingLeft:12 }}>{person.bio}</div>
+          </div>
+
+          <div style={{ marginBottom:12 }}>
+            <div style={{ background:"#1a1a2e", height:3 }}>
+              <div style={{ height:"100%", background:person.group==="eingeweiht"?"#60a0f0":ACCENT, width:`${progress.pct}%`, transition:"width 0.3s" }} />
+            </div>
+            <div style={{ textAlign:"right", fontSize:11, color:MUTED, marginTop:4 }}>{progress.done} / {progress.total} eingepackt</div>
+          </div>
+
+          {person.sections.map((sec,si) => (
+            <div key={si} style={{ border:`1px solid ${BORDER}`, background:CARD, marginBottom:10 }}>
+              <div style={{ background:"#1a1a2e", padding:"8px 16px", fontSize:10, letterSpacing:"0.2em", textTransform:"uppercase", color:person.group==="eingeweiht"?"#60a0f0":ACCENT }}>{sec.title}</div>
+              {sec.items.map((item,ii) => (
+                <CheckItem key={ii} item={item} checked={!!checked[active][`${si}-${ii}`]} onToggle={()=>toggle(active,si,ii)} />
+              ))}
+            </div>
+          ))}
+
+          <SecretSection key={active} secret={person.secret} pin={PINS[active]} />
+
+          <div style={{ border:"1px solid #7a1515", padding:"12px 16px", textAlign:"center", fontSize:12, color:MUTED, lineHeight:1.8, marginTop:12 }}>
+            <span style={{ color:RED, fontWeight:"bold" }}>HINWEIS: </span>{person.warning}
+          </div>
+        </div>
+      )}
+
+      <div style={{ textAlign:"center", marginTop:48, color:"#222230", fontSize:10, letterSpacing:"0.15em", lineHeight:2.5 }}>
+        <div>#BEST-TEAM GOES ████████████</div>
+        <div>Geheimkomitee · Destination nicht bestätigt · Alle Angaben ohne Gewähr</div>
+      </div>
+    </div>
+  );
+}
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
