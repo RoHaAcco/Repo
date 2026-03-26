@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>#BEST-Team goes ░░░░░░░░░</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.23.2/babel.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0a0a0f; }
@@ -57,11 +57,11 @@
 </head>
 <body>
   <div id="root"></div>
-  <script type="text/babel">
+  <script type="text/babel" data-presets="react">
 const { useState, useEffect, useRef } = React;
 
 
-// PINs – bitte einzeln per WhatsApp verschicken!
+// PINs - bitte einzeln per WhatsApp verschicken!
 const PINS = {
   jannik:  "1904",
   maxi:    "2207",
@@ -92,19 +92,19 @@ const badgeStyle = {
   "EINGEWEIHT": { background: "#14532d", color: "#86efac" },
 };
 
-// ─────────────────────────────────────────────
+// -------------------------------------------
 //  DATA
-// ─────────────────────────────────────────────
+// -------------------------------------------
 const data = {
 
-  // ── NICHT EINGEWEIHT ──────────────────────
+  // --- NICHT EINGEWEIHT ---
 
   jannik: {
     emoji: "🌀", label: "Jannik B.", group: "geheim",
     deckname: "Deckname: Der Reiseleiter | Funktion: Chaos-Koordination | Sicherheitsstufe: UNBERECHENBAR",
-    bio: "Bekannt für: Reiseführung ohne Plan, Stripclub-Verweigerung (mündlich, nie schriftlich), Anführer der legendären Operation Malle. Snus-Versorgungsoffizier auf Lebenszeit. Beziehungsstatus: freie Wildbahn – und das aus voller Überzeugung.",
+    bio: "Bekannt für: Reiseführung ohne Plan, Stripclub-Verweigerung (mündlich, nie schriftlich), Anführer der legendären Operation Malle. Snus-Versorgungsoffizier auf Lebenszeit. Beziehungsstatus: freie Wildbahn - und das aus voller Überzeugung.",
     sections: [
-      { title: "🏕️ Pflicht – Kein Pack, kein Ticket", items: [
+      { title: "🏕️ Pflicht - Kein Pack, kein Ticket", items: [
         { name: "Isomatte", note: "Du schläfst irgendwo. Das Komitee garantiert nichts außer dem Boden.", badge: "MUSS" },
         { name: "Schlafsack", note: "Schlafsack bedeutet nicht zwingend Schlafen. Beides bleibt offen.", badge: "MUSS" },
         { name: "Reisepass oder Personalausweis", note: "Kein Kommentar. Nur Nachdruck.", badge: "MUSS" },
@@ -112,12 +112,12 @@ const data = {
       { title: "🌀 Janniks persönliches Chaos-Kit", items: [
         { name: "Snus-Monatsvorrat (für ein Wochenende)", note: "Für dich. Nur für dich. Teilen ist kein offizieller Bestandteil dieses Pakets." },
         { name: "Trinktrichter (zusammenklappbar, diskret verstaubar)", note: "Der ursprüngliche Plan lautete: gemütlich. Der Trichter hatte andere Vorstellungen." },
-        { name: "Taschentücher für Maxi – eine Großpackung", note: "Maxi schnupft. Du weißt es. Pack sie ein. Es ist dein Beitrag zur Gruppengesundheit.", badge: "FREMDPAKET" },
+        { name: "Taschentücher für Maxi - eine Großpackung", note: "Maxi schnupft. Du weißt es. Pack sie ein. Es ist dein Beitrag zur Gruppengesundheit.", badge: "FREMDPAKET" },
         { name: "Stadtplan einer völlig falschen Stadt", note: "Du wirst ihn rausziehen. Du wirst so tun als ob. Die Gruppe wird dir trotzdem folgen." },
-        { name: "Visitenkarten: Jannik B. – Reiseleiter", note: "Selbstbewusstsein ist die halbe Führungsarbeit. Die andere Hälfte ist Improvisation." },
+        { name: "Visitenkarten: Jannik B. - Reiseleiter", note: "Selbstbewusstsein ist die halbe Führungsarbeit. Die andere Hälfte ist Improvisation." },
         { name: "Stripclub-Nein-Button (rot, mit Ton)", note: "Drück ihn. Überzeug dich selbst. Er hat nachweislich noch nie funktioniert." },
         { name: "Schlafmaske (Totenkopfmotiv, lichtdicht)", note: "Für den Rückweg. Grund bekannt. Wird nicht weiter kommentiert." },
-        { name: "Voucher: Ich wars nicht – 5 Stück, laminiert", note: "Präventiv verpackt. Erfahrungsgemäß bis Samstag 14 Uhr vollständig verbraucht." },
+        { name: "Voucher: Ich wars nicht - 5 Stück, laminiert", note: "Präventiv verpackt. Erfahrungsgemäß bis Samstag 14 Uhr vollständig verbraucht." },
         { name: "Mini-Klappstuhl (für Führungsauftritte)", note: "Ein Reiseleiter sitzt. Alle anderen stehen. Das ist Hierarchie, kein Zufall." },
         { name: "Trillerpfeife (besonders laut)", note: "Zur Gruppenkoordination. Wird missbräuchlich eingesetzt. Das ist bereits eingeplant." },
       ]},
@@ -125,9 +125,9 @@ const data = {
     secret: {
       title: "Operation: Erinnerungsfoto",
       items: [
-        { name: "Kleiner Bilderrahmen (Reiseformat, für 10x15)", note: "Vor Ort kaufen – Drogerie, Souvenirladen, egal. Hauptsache er passt ins Gepäck für den Rückweg." },
-        { name: "Gruppenfoto organisieren – eines das wirklich gut wird", note: "Nicht das verwackelte um Mitternacht. Ein echtes. Samstagabend, gute Stimmung, alle beisammen – du gibst das Kommando." },
-        { name: "Foto drucken lassen (Drogerie, Fotoautomat oder Hotel)", note: "Ins Netz gehen, nächste Filiale finden, ausdrucken. Du bist Reiseleiter – Logistik ist dein Fach." },
+        { name: "Kleiner Bilderrahmen (Reiseformat, für 10x15)", note: "Vor Ort kaufen - Drogerie, Souvenirladen, egal. Hauptsache er passt ins Gepäck für den Rückweg." },
+        { name: "Gruppenfoto organisieren - eines das wirklich gut wird", note: "Nicht das verwackelte um Mitternacht. Ein echtes. Samstagabend, gute Stimmung, alle beisammen - du gibst das Kommando." },
+        { name: "Foto drucken lassen (Drogerie, Fotoautomat oder Hotel)", note: "Ins Netz gehen, nächste Filiale finden, ausdrucken. Du bist Reiseleiter - Logistik ist dein Fach." },
         { name: "Foto einrahmen, Sonntagmorgen überreichen", note: "Keine große Rede nötig. Einfach auf den Tisch stellen. Der Moment spricht für sich." },
       ],
       warning: "Niemand darf vorher wissen, dass das geplant ist. Kein Labern, kein Andeuten, kein vielsagender Blick."
@@ -138,7 +138,7 @@ const data = {
   maxi: {
     emoji: "🎩", label: "Maxi L.", group: "geheim",
     deckname: "Deckname: Der Kleine Boss | Funktion: Vorstand mit unbekannter Agenda | Sicherheitsstufe: UNDURCHSCHAUBAR",
-    bio: "Bekannt für: Stille Wasser, tiefe Geheimnisse und Schnupftabak in industriellen Mengen. Körpergröße: charmant kompakt – was an Höhe fehlt, steckt vollständig in Autorität. Vergeben. Sie weiß nichts von dieser Liste.",
+    bio: "Bekannt für: Stille Wasser, tiefe Geheimnisse und Schnupftabak in industriellen Mengen. Körpergröße: charmant kompakt - was an Höhe fehlt, steckt vollständig in Autorität. Vergeben. Sie weiß nichts von dieser Liste.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Auch Vorstände schlafen auf dem Boden. Das nennt sich Demokratie.", badge: "MUSS" },
@@ -149,7 +149,7 @@ const data = {
         { name: "Schnupftabak (Doppelvorrat, sicherheitshalber)", note: "Jannik bringt Taschentücher. Du bringst den eigentlichen Inhalt. Das System läuft seit Jahren." },
         { name: "Mini-Klappstuhl (für strategischen Überblick)", note: "Rein praktisch. Für Überblick und Autorität. Kein weiterer Kommentar." },
         { name: "Notizbuch: Was ich weiß, aber nicht sage", note: "Stille Wasser. Tiefe Seiten. Du weißt Dinge. Für die Nachwelt aufschreiben." },
-        { name: "Stempel: Genehmigt – Vorstand", note: "Für Gruppenentscheidungen, Restaurantrechnungen und Aktionen mit fragwürdiger Grundlage." },
+        { name: "Stempel: Genehmigt - Vorstand", note: "Für Gruppenentscheidungen, Restaurantrechnungen und Aktionen mit fragwürdiger Grundlage." },
         { name: "Schweigegeld-Münzen (vorzugsweise Fremdwährung)", note: "Was auf der Reise passiert, bleibt auf der Reise. Der Preis variiert je nach Zeugenanzahl." },
         { name: "Polo-Shirt (Kragen bei Bedarf aufstellbar)", note: "Autorität muss gepflegt und sichtbar getragen werden." },
         { name: "Gute Flasche Rotwein (für stille Momente)", note: "Für Situationen, die Tiefe verlangen. Oder einfach für Freitagabend." },
@@ -159,19 +159,19 @@ const data = {
     secret: {
       title: "Operation: Ehrenurkunde",
       items: [
-        { name: "Selbstgebastelte Urkunde: Bester Reiseleiter der Welt", note: "Für Jannik. Auf echtem Papier – mit Unterschrift und deinem Vorstandsstempel. Den hast du dabei." },
+        { name: "Selbstgebastelte Urkunde: Bester Reiseleiter der Welt", note: "Für Jannik. Auf echtem Papier - mit Unterschrift und deinem Vorstandsstempel. Den hast du dabei." },
         { name: "Goldener Aufkleber-Stern für die Urkunde", note: "Optisch unverzichtbar. Kaufhausqualität ist ausdrücklich erlaubt und sogar erwünscht." },
         { name: "Feierliche Übergabe am Sonntagmorgen", note: "Wenn alle zusehen. Kurze Ansprache. Ernstes Gesicht. Du weißt, wie du das machst." },
       ],
-      warning: "Jannik darf bis zur Übergabe nichts ahnen. Urkunde vorab fertigstellen – nicht im Zug basteln."
+      warning: "Jannik darf bis zur Übergabe nichts ahnen. Urkunde vorab fertigstellen - nicht im Zug basteln."
     },
-    warning: "Maxi weiß vermutlich mehr als er sagt. Das ist kein Fehler – das ist sein Charakter."
+    warning: "Maxi weiß vermutlich mehr als er sagt. Das ist kein Fehler - das ist sein Charakter."
   },
 
   leon: {
     emoji: "😄", label: "Leon P.", group: "geheim",
     deckname: "Deckname: Der Gemütliche | Funktion: 2. Vorstand | Bartwuchs: Projekt läuft, Ergebnis offen",
-    bio: "Bekannt für: Gemütlichkeit auf absolutem Profiniveau, echter Geselligkeit und einem Kopf, der mehr denkt als er verrät – studiert immerhin. Kein nennenswerter Bartwuchs – wir erwähnen es, weil er es hasst. Kartenspiele? Gewinnt meistens. Zweiter Vorstand mit Herz aus purem Gold.",
+    bio: "Bekannt für: Gemütlichkeit auf absolutem Profiniveau, echter Geselligkeit und einem Kopf, der mehr denkt als er verrät - studiert immerhin. Kein nennenswerter Bartwuchs - wir erwähnen es, weil er es hasst. Kartenspiele? Gewinnt meistens. Zweiter Vorstand mit Herz aus purem Gold.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Deine Gemütlichkeit macht den Boden physikalisch leider nicht weicher.", badge: "MUSS" },
@@ -181,7 +181,7 @@ const data = {
       { title: "😄 Leons Gemütlichkeits-Arsenal", items: [
         { name: "Kartenspiel (mindestens eines, besser zwei)", note: "Du wirst gewinnen. Alle wissen es. Du weißt es. Die Karten wissen es." },
         { name: "Bartwuchs-Booster-Serum (Apotheke genügt völlig)", note: "Das Projekt läuft. Die Genetik verhandelt noch. Das Serum hält die Hoffnung lebendig." },
-        { name: "Kuscheldecke (komprimierbar, Rucksackformat)", note: "Du bist ein Riesenbaby – das ist kein Vorwurf, das ist eine Beschreibung mit echter Zuneigung." },
+        { name: "Kuscheldecke (komprimierbar, Rucksackformat)", note: "Du bist ein Riesenbaby - das ist kein Vorwurf, das ist eine Beschreibung mit echter Zuneigung." },
         { name: "Schnuller (ironisch verpackt, mit Schleifchen)", note: "Für den absoluten Notfall. Riesenbabys wollen versorgt werden.", badge: "OPTIONAL" },
         { name: "Riesenportion Gummibärchen (mindestens 500g)", note: "Gemütlichkeit braucht Grundversorgung. Hunger ist kein Vibe." },
         { name: "Aufblasbare Sitzunterlage für die Zugfahrt", note: "Komfort ist keine Schwäche. Komfort ist eine bewusste Lebenshaltung." },
@@ -203,7 +203,7 @@ const data = {
   maya: {
     emoji: "🔮", label: "Maya L.", group: "geheim",
     deckname: "Deckname: Die kleine Gefahr | Funktion: Erste-Hilfe-Fee und heimliche Partymaschine",
-    bio: "Bekannt für: völlig unscheinbar aussehen und dann sämtliche Erwartungen in die Luft jagen. Schwester von Maxi – beide massiv unterschätzt. Vergeben. Medizinische Kenntnisse werden dieses Wochenende dringend gebraucht werden. Keine bekannten Suchtmittel – dafür umso mehr rohe Energie.",
+    bio: "Bekannt für: völlig unscheinbar aussehen und dann sämtliche Erwartungen in die Luft jagen. Schwester von Maxi - beide massiv unterschätzt. Vergeben. Medizinische Kenntnisse werden dieses Wochenende dringend gebraucht werden. Keine bekannten Suchtmittel - dafür umso mehr rohe Energie.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Auch Erste-Hilfe-Feen schlafen. Gelegentlich jedenfalls.", badge: "MUSS" },
@@ -212,9 +212,9 @@ const data = {
       ]},
       { title: "🔮 Mayas Notfall- und Partykoffer", items: [
         { name: "Erste-Hilfe-Set (vollständig, wirklich vollständig)", note: "Pflaster, Verbände, Ibuprofen in Mengen jenseits des Üblichen. Jannik kommt als Erster. Historisch belegt." },
-        { name: "Elektrolytpulver – mindestens 10 Beutel", note: "Für das gesamte Team. Sonntagmorgen. Die Menge ist kein Scherz, sondern reiner Erfahrungswert.", badge: "TEAMGUT" },
+        { name: "Elektrolytpulver - mindestens 10 Beutel", note: "Für das gesamte Team. Sonntagmorgen. Die Menge ist kein Scherz, sondern reiner Erfahrungswert.", badge: "TEAMGUT" },
         { name: "Wegwerfkamera (analog, 27 Aufnahmen)", note: "Für Momente, die im digitalen Raum besser nicht existieren sollten." },
-        { name: "Glow-Sticks – 10 Stück, gemischt", note: "Die ruhige Schwester. Bis die Musik angeht. Dann kennt die Gruppe dich nicht mehr." },
+        { name: "Glow-Sticks - 10 Stück, gemischt", note: "Die ruhige Schwester. Bis die Musik angeht. Dann kennt die Gruppe dich nicht mehr." },
         { name: "Taschentücher für Maxi (strategischer Backup-Vorrat)", note: "Jannik hat die offizielle Ration. Du hast die Reserve. Doppelt abgesichert.", badge: "FREMDPAKET" },
         { name: "Geheimplaylist (fertig kuratiert, kein Vorhören)", note: "Vorbereitet. Geladen. Wartet geduldig auf den exakt richtigen Moment." },
         { name: "Ohrstöpsel (für den Moment nach dem Party-Modus)", note: "Du weißt wie es endet. Du bist vorbereitet. Das nennt sich echte Weitsicht." },
@@ -235,7 +235,7 @@ const data = {
   emily: {
     emoji: "🌿", label: "Emily S.", group: "geheim",
     deckname: "Deckname: Die Vernunft | Funktion: Moralischer Anker und stille Gruppenretterin",
-    bio: "Bekannt für: Gute Noten ohne großes Aufheben, nebenbei Kellnerin im Restaurant – und damit die einzige in der Gruppe mit echtem Servicegedanken. Jüngste im Team, aber mit Köpfchen weit vorne. Aktuell in einer No-Alk- und Vegetarismus-Phase – das Komitee wertet das als Experiment, nicht als Lebenseinstellung. Gute Seele mit erkennbar pragmatischer Ader: Wenn die Motivation stimmt, ist Emily dabei.",
+    bio: "Bekannt für: Gute Noten ohne großes Aufheben, nebenbei Kellnerin im Restaurant - und damit die einzige in der Gruppe mit echtem Servicegedanken. Jüngste im Team, aber mit Köpfchen weit vorne. Aktuell in einer No-Alk- und Vegetarismus-Phase - das Komitee wertet das als Experiment, nicht als Lebenseinstellung. Gute Seele mit erkennbar pragmatischer Ader: Wenn die Motivation stimmt, ist Emily dabei.",
     sections: [
       { title: "🌿 Emilys Survival-Kit", items: [
         { name: "Isomatte", note: "Auch die Jüngste braucht Schlaf. Manchmal sogar mehr als alle anderen.", badge: "MUSS" },
@@ -247,8 +247,8 @@ const data = {
         { name: "Trinkgeld-Portemonnaie (gut gefüllt)", note: "Wer kellnert, weiß wie das Wochenende läuft. Und kalkuliert entsprechend vor." },
         { name: "Lernkarten (für das schlechte Gewissen am Sonntag)", note: "Werden eingepackt. Werden nicht angeschaut. Werden beruhigend im Rucksack mitgetragen." },
         { name: "Badeanzug (sicherheitshalber, ohne Hintergedanken)", note: "Nur für Schwimmbäder natürlich. Was in Malle passiert ist, ist nicht Gegenstand dieser Liste." },
-        { name: "Sonnencreme LSF 50+", note: "Wozu genau – wird vor Ort klar. Einfach einpacken." },
-        { name: "Notfallschokolade (die gute)", note: "Phase hin oder her – Schokolade ist kein Dogma, das ist Medizin." },
+        { name: "Sonnencreme LSF 50+", note: "Wozu genau - wird vor Ort klar. Einfach einpacken." },
+        { name: "Notfallschokolade (die gute)", note: "Phase hin oder her - Schokolade ist kein Dogma, das ist Medizin." },
         { name: "Portemonnaie (gut bestückt, Motivation ist alles)", note: "Emily ist bekannt dafür, dass die richtige Motivation Wunder wirkt. Das Wochenende bietet Gelegenheiten." },
         { name: "Kerze (Duftrichtung: Beherrschung)", note: "Existiert nicht als echtes Produkt. Steht trotzdem auf der Liste. Das Komitee ist kreativ." },
       ]},
@@ -257,20 +257,20 @@ const data = {
       title: "Operation: Vernunft-Bingo",
       items: [
         { name: "Bingo-Karte erstellen: Die Gruppe heute Abend", note: "Vor der Reise ausfüllen: Felder wie 'Jannik benutzt den Trichter', 'Maxi zieht schweigend einen Zettel raus', 'Leon schläft als Erster ein', 'Jule tanzt auf irgendetwas'. Eine Karte pro eingeweihter Person." },
-        { name: "Karten heimlich an Robert, Luca, Jule und Alex verteilen", note: "Vorab per WhatsApp verschicken. Alle spielen still mit. Niemand redet drüber. Wer Bingo hat, sagt nur leise 'Vernunft' – das ist das Codewort." },
-        { name: "Kleiner Preis für den Gewinner einpacken", note: "Schokolade, Gummibärchen, Pflaster mit Herzchen – egal was. Hauptsache es gibt einen symbolischen Gewinn." },
+        { name: "Karten heimlich an Robert, Luca, Jule und Alex verteilen", note: "Vorab per WhatsApp verschicken. Alle spielen still mit. Niemand redet drüber. Wer Bingo hat, sagt nur leise 'Vernunft' - das ist das Codewort." },
+        { name: "Kleiner Preis für den Gewinner einpacken", note: "Schokolade, Gummibärchen, Pflaster mit Herzchen - egal was. Hauptsache es gibt einen symbolischen Gewinn." },
       ],
       warning: "Die nicht Eingeweihten dürfen nie von diesem Bingo erfahren. Codewort: Vernunft. Kein Lachen wenn jemand es sagt."
     },
-    warning: "Emily ist die Jüngste – aber unterschätzt sie nicht. Gute Noten, guter Service, gute Argumente."
+    warning: "Emily ist die Jüngste - aber unterschätzt sie nicht. Gute Noten, guter Service, gute Argumente."
   },
 
-  // ── EINGEWEIHT ────────────────────────────
+  // --- EINGEWEIHT -------
 
   robert: {
     emoji: "🚒", label: "Robert H.", group: "eingeweiht",
     deckname: "Deckname: Der echte Reiseleiter | Funktion: Backup-Kommandant & IT-Notfallservice | Alter: 31 (Gruppenältester, trägt es mit Würde)",
-    bio: "Bekannt für: Unterkunft gebucht – oder auch nicht, das bleibt vorerst offen. Ehemaliger 1. Vorstand (8 Jahre), Feuerwehrkommandant und IT-ler in Personalunion. Übernimmt die Reiseleitung sobald Jannik den Trichter zu oft benutzt hat. Glücklicher Single. Der ruhige Pol mit dem größten Überblick.",
+    bio: "Bekannt für: Unterkunft gebucht - oder auch nicht, das bleibt vorerst offen. Ehemaliger 1. Vorstand (8 Jahre), Feuerwehrkommandant und IT-ler in Personalunion. Übernimmt die Reiseleitung sobald Jannik den Trichter zu oft benutzt hat. Glücklicher Single. Der ruhige Pol mit dem größten Überblick.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Du hast die Unterkunft gebucht. Vielleicht. Zur Sicherheit trotzdem einpacken.", badge: "MUSS" },
@@ -285,14 +285,14 @@ const data = {
         { name: "Ibuprofen-Großpackung (als 1. Vorstand im Ruhestand)", note: "8 Jahre Vorstandserfahrung lehren: immer Schmerzmittel dabei haben.", badge: "TEAMGUT" },
         { name: "Formular: Übergabe der Reiseleitung an Robert", note: "Für den Moment, wenn Jannik ausfällt. Vorausgefüllt. Nur noch unterschreiben." },
         { name: "Notfall-Snacks (für den IT-Notfall-Modus)", note: "Wenn jemand fragt ob du mal kurz aufs Handy schauen kannst: Snack raus, Problem lösen, weiterfeiern." },
-        { name: "Würfelbecher (für unentschiedene Gruppensituationen)", note: "Wenn alle gleichzeitig reden und niemand entscheidet – du entscheidest. Mit Würfeln." },
+        { name: "Würfelbecher (für unentschiedene Gruppensituationen)", note: "Wenn alle gleichzeitig reden und niemand entscheidet - du entscheidest. Mit Würfeln." },
       ]},
     ],
     secret: {
       title: "Operation: Stille Übernahme",
       items: [
-        { name: "Geheimes Alternativprogramm für Sonntagvormittag", note: "Überrasch die Gruppe mit einem lokalen Geheimtipp – du kennst die Stadt. Einfach losgehen und alle mitziehen." },
-        { name: "Gruppen-Erinnerungskarte selbst beschriften", note: "Alle sollen unterschreiben – koordiniere das still mit den anderen Eingeweihten. Als Abschluss-Geste für alle." },
+        { name: "Geheimes Alternativprogramm für Sonntagvormittag", note: "Überrasch die Gruppe mit einem lokalen Geheimtipp - du kennst die Stadt. Einfach losgehen und alle mitziehen." },
+        { name: "Gruppen-Erinnerungskarte selbst beschriften", note: "Alle sollen unterschreiben - koordiniere das still mit den anderen Eingeweihten. Als Abschluss-Geste für alle." },
       ],
       warning: "Du bist der älteste und erfahrenste. Das Komitee verlässt sich auf dich wenn es drauf ankommt."
     },
@@ -302,7 +302,7 @@ const data = {
   luca: {
     emoji: "🏠", label: "Luca P.", group: "eingeweiht",
     deckname: "Deckname: Der Riese | Funktion: Ehemaliger Kassier · Familienmensch mit Ausgang | Körpergröße: beeindruckend",
-    bio: "Bekannt für: Sehr groß, sehr breit, sehr zuverlässig. Bruder von Leon – die Gene verteilen sich halt unterschiedlich. Frau und Kind seit gefühlt immer. Eigenes Haus seit kurzem. In Malle als erster aufs Zimmer. Merkt langsam, dass Feiern Substanz kostet. Das Wochenende wird ihn trotzdem erwischen.",
+    bio: "Bekannt für: Sehr groß, sehr breit, sehr zuverlässig. Bruder von Leon - die Gene verteilen sich halt unterschiedlich. Frau und Kind seit gefühlt immer. Eigenes Haus seit kurzem. In Malle als erster aufs Zimmer. Merkt langsam, dass Feiern Substanz kostet. Das Wochenende wird ihn trotzdem erwischen.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Extrabreite empfohlen. Die Standardgröße kennt deine Dimensionen nicht.", badge: "MUSS" },
@@ -323,7 +323,7 @@ const data = {
       title: "Operation: Großer Bruder",
       items: [
         { name: "Kleines Mitbringsel für dein Kind von der Reise", note: "Magnet, Kühlschrankaufkleber, irgendwas mit Stadtmotiv. Du weißt, wie groß das Leuchten in den Augen wird." },
-        { name: "Geheimen Abend-Tipp an Leon weitergeben", note: "Du kennst ihn am besten. Wenn er zu lang aufbleibt und es ihm nicht gut tut – ein Blick reicht. Großes Bruder-Privileg." },
+        { name: "Geheimen Abend-Tipp an Leon weitergeben", note: "Du kennst ihn am besten. Wenn er zu lang aufbleibt und es ihm nicht gut tut - ein Blick reicht. Großes Bruder-Privileg." },
       ],
       warning: "Du bist der große Bruder. Manchmal reicht wirklich ein Blick."
     },
@@ -333,7 +333,7 @@ const data = {
   jule: {
     emoji: "🎉", label: "Jule G.", group: "eingeweiht",
     deckname: "Deckname: Die Allzweckwaffe | Funktion: Ehemalige Social-Media-Beauftragte · Kinderkrippen-Fachkraft · Partywildcard",
-    bio: "Bekannt für: Bei jedem Spaß dabei, immer. Eigenes Haus seit kurzem, seit letztem Jahr verheiratet – und damit frisch umbenannt zu Graßl. Arbeitet in der Kinderkrippe – was die Toleranzschwelle für Chaos auf ein professionelles Niveau hebt. Trinkt gerne viel und wird dann putzig auf eine Weise, die niemanden stört und alle entzückt.",
+    bio: "Bekannt für: Bei jedem Spaß dabei, immer. Eigenes Haus seit kurzem, seit letztem Jahr verheiratet - und damit frisch umbenannt zu Graßl. Arbeitet in der Kinderkrippe - was die Toleranzschwelle für Chaos auf ein professionelles Niveau hebt. Trinkt gerne viel und wird dann putzig auf eine Weise, die niemanden stört und alle entzückt.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Auch wer immer dabei ist, braucht irgendwann einen Platz zum Liegen.", badge: "MUSS" },
@@ -344,9 +344,9 @@ const data = {
         { name: "Sofortbild-Kamera oder Fotoapp mit Druckfunktion", note: "Du warst Social-Media-Beauftragte. Das Dokumentieren sitzt in den Knochen." },
         { name: "Propskiste (Partyhüte, Sonnenbrillen, Schnurrbart-Sticker)", note: "Für Fotos, die in zehn Jahren noch lustig sind. Oder peinlich. Beides zählt." },
         { name: "Trinkspiel-Karten (reisefertig, wasserfest)", note: "Nur zur Sicherheit. Für den Fall, dass jemand Struktur braucht." },
-        { name: "Großes Tuch / Pareo (Multifunktional)", note: "Decke, Sitzmatte, Verkleidung, Flagge – du findest den Einsatz." },
+        { name: "Großes Tuch / Pareo (Multifunktional)", note: "Decke, Sitzmatte, Verkleidung, Flagge - du findest den Einsatz." },
         { name: "Kinderkrippen-Reflex ausschalten (für das Wochenende)", note: "Du arbeitest mit Kleinkindern. Die Gruppe ist keine Kleinkindergruppe. Meistens.", badge: "OPTIONAL" },
-        { name: "Wasserflaschen-Aufkleber: Jule's Flasche – Finger weg", note: "Präventiv. In der Kinderkrippe arbeiten lehrt: beschriften hilft." },
+        { name: "Wasserflaschen-Aufkleber: Jule's Flasche - Finger weg", note: "Präventiv. In der Kinderkrippe arbeiten lehrt: beschriften hilft." },
         { name: "Playlist: Hort-Hits die niemand kennen soll", note: "Du hörst sie heimlich. Irgendwann läuft sie versehentlich. Das wird unvergesslich." },
       ]},
     ],
@@ -356,7 +356,7 @@ const data = {
         { name: "Geheimes Gruppen-Reels oder Fotocollage erstellen", note: "Du bist die ehemalige Social-Media-Beauftragte. Das ist dein Moment. Samstagabend sammeln, Sonntagmorgen zeigen." },
         { name: "Alle heimlich beim Schlafen fotografieren (PG-rated)", note: "Für die Gruppe. Für die Ewigkeit. Mit Anstand. Aber mit Humor." },
       ],
-      warning: "Der Content bleibt in der Gruppe. Kein öffentliches Posting ohne Absprache – du kennst die Regeln."
+      warning: "Der Content bleibt in der Gruppe. Kein öffentliches Posting ohne Absprache - du kennst die Regeln."
     },
     warning: "Jule ist der Treibstoff des Wochenendes. Wenn Jule tanzt, tanzt die ganze Gruppe."
   },
@@ -364,7 +364,7 @@ const data = {
   alex: {
     emoji: "🎺", label: "Alex H.", group: "eingeweiht",
     deckname: "Deckname: Die Kichererbse | Funktion: Ehemaliger 2. Vorstand · Sportass · Partyband-Frontmann",
-    bio: "Bekannt für: Halbmarathons, Musikkapelle, Partyband und ein Lachen das Räume füllt. Wäre lieber in eine kleine deutsche Stadt gefahren – wurde überstimmt, nimmt es mit Humor. War 2. Vorstand unter Robert. Lässt keine sportliche Herausforderung aus und trägt das mit derselben Energie wie seine beste Bühnenshow.",
+    bio: "Bekannt für: Halbmarathons, Musikkapelle, Partyband und ein Lachen das Räume füllt. Wäre lieber in eine kleine deutsche Stadt gefahren - wurde überstimmt, nimmt es mit Humor. War 2. Vorstand unter Robert. Lässt keine sportliche Herausforderung aus und trägt das mit derselben Energie wie seine beste Bühnenshow.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Auch Sportler schlafen. Manchmal sogar gerne.", badge: "MUSS" },
@@ -384,7 +384,7 @@ const data = {
     secret: {
       title: "Operation: Spontankonzert",
       items: [
-        { name: "1-2 Songs einüben die zur Gruppe passen", note: "Samstagabend, wenn die Stimmung am besten ist – kurze Spontaneinlage. Unplugged, unangekündigt, unvergesslich." },
+        { name: "1-2 Songs einüben die zur Gruppe passen", note: "Samstagabend, wenn die Stimmung am besten ist - kurze Spontaneinlage. Unplugged, unangekündigt, unvergesslich." },
         { name: "Robert vorher einweihen für den richtigen Moment", note: "Robert gibt das Zeichen. Du lieferst den Auftritt. Das ist Teamwork auf höchstem Niveau." },
       ],
       warning: "Keiner darf vorher wissen, dass das geplant ist. Spontan ist nur gut wenn es wirklich überrascht."
@@ -394,9 +394,9 @@ const data = {
 
 };
 
-// ─────────────────────────────────────────────
+// -------------------------------------------
 //  COMPONENTS
-// ─────────────────────────────────────────────
+// -------------------------------------------
 
 function CheckItem({ item, checked, onToggle }) {
   const [hover, setHover] = useState(false);
@@ -449,7 +449,7 @@ function SecretSection({ secret, pin }) {
             </div>
           ))}
         </div>
-        {err && <div style={{ fontSize: 11, color: RED, marginBottom: 12, letterSpacing: "0.1em" }}>FALSCHER CODE – ZUGRIFF VERWEIGERT</div>}
+        {err && <div style={{ fontSize: 11, color: RED, marginBottom: 12, letterSpacing: "0.1em" }}>FALSCHER CODE - ZUGRIFF VERWEIGERT</div>}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 52px)", gap: 8, justifyContent: "center" }}>
           {["1","2","3","4","5","6","7","8","9","⌫","0","✓"].map(k => (
             <button key={k} onClick={() => {
@@ -478,7 +478,7 @@ function SecretSection({ secret, pin }) {
 }
 
 
-// ── TYPEWRITER COMPONENT ─────────────────────
+// --- TYPEWRITER COMPONENT ---------------------
 function TypewriterText({ text, speed, style }) {
   const [displayed, setDisplayed] = useState("");
   const idx = useRef(0);
@@ -496,7 +496,7 @@ function TypewriterText({ text, speed, style }) {
 }
 
 
-// ── INTRO SCREEN ─────────────────────────────
+// --- INTRO SCREEN -----------------------------
 function IntroScreen({ onAccept }) {
   const [phase, setPhase] = useState(0);
   const [countdown, setCountdown] = useState({d:0,h:0,m:0,s:0});
@@ -584,7 +584,7 @@ function IntroScreen({ onAccept }) {
           ))}
         </div>
 
-        {/* Big title – glitch effect */}
+        {/* Big title - glitch effect */}
         {phase >= 3 && (
           <div className="fade-in-up" style={{ textAlign: "center", marginBottom: 32, position: "relative" }}>
             <div style={{ display: "inline-block", background: RED, color: "#fff", fontSize: 10, letterSpacing: "0.35em", padding: "4px 18px", marginBottom: 14, transform: "rotate(-1.5deg)", position: "relative", zIndex: 1 }}>
@@ -612,7 +612,7 @@ function IntroScreen({ onAccept }) {
         {phase >= 4 && (
           <div className="fade-in-up" style={{ marginBottom: 32 }}>
             <div style={{ fontSize: 10, color: MUTED, letterSpacing: "0.25em", textAlign: "center", marginBottom: 12 }}>
-              ── ABHOLZEITPUNKT: 29.05.2026 · 15:00 UHR ──
+              -- ABHOLZEITPUNKT: 29.05.2026 · 15:00 UHR --
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
               {[["TAGE", countdown.d], ["STUNDEN", countdown.h], ["MINUTEN", countdown.m], ["SEKUNDEN", countdown.s]].map(([label, val]) => (
@@ -671,7 +671,7 @@ function IntroScreen({ onAccept }) {
   );
 }
 
-// ── MISSION PAGE (Briefing) ───────────────────
+// --- MISSION PAGE (Briefing) -------------------
 function MissionPage({ onStart }) {
   const [visible, setVisible] = useState(0);
   const lines = ["VERSCHLUESSELTE NACHRICHT EMPFANGEN...","ABSENDER: UNBEKANNT","ENTSCHLUESSELUNG LAEUFT...","ZUGRIFF GEWAEHRT."];
@@ -694,9 +694,9 @@ function MissionPage({ onStart }) {
       </div>
       <div style={{ borderTop: `1px solid ${BORDER}`, margin: "24px 0" }} />
 
-// ─────────────────────────────────────────────
+// -------------------------------------------
 //  MAIN APP
-// ─────────────────────────────────────────────
+// -------------------------------------------
 function App() {
   const [page, setPage]       = useState("intro");
   const [active, setActive]   = useState(null);
