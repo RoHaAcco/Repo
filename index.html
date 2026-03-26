@@ -690,9 +690,18 @@ function IntroScreen({ onAccept }) {
         {phase >= 5 && (
           <div className="fade-in-up">
             <div style={{ border: `1px solid ${BORDER}`, background: CARD, padding: "16px 20px", marginBottom: 20, fontSize: 12, color: "#8888aa", lineHeight: 1.9, textAlign: "center" }}>
-              Diese Nachricht ist <strong style={{ color: TEXT }}>ausschliesslich für dich bestimmt</strong>.<br />
-              Deine persönliche Einsatzakte und ein <strong style={{ color: PURPLE }}>geheimer Auftrag</strong> warten.<br />
-              <span style={{ color: MUTED, fontSize: 11 }}>Destination: ████████ · Wird bei Ankunft offenbart.</span>
+              <div style={{ fontSize: 10, color: MUTED, letterSpacing: "0.3em", marginBottom: 14 }}>&#9608;&#9608; EINGEHENDE TRANSMISSION &#9608;&#9608;</div>
+              Wir wissen, wer du bist.<br />
+              Wir wissen, was du kannst.<br />
+              Deshalb bist du hier.<br /><br />
+              <strong style={{ color: TEXT, letterSpacing: "0.05em" }}>Am 29. Mai um 15:00 Uhr</strong> beginnt etwas,<br />
+              das du so noch nicht erlebt hast.<br /><br />
+              Deine persönliche <strong style={{ color: PURPLE }}>Einsatzakte</strong> wartet auf dich.<br />
+              Dein <strong style={{ color: PURPLE }}>Geheimauftrag</strong> ist bereits versiegelt.<br />
+              Die <strong style={{ color: ACCENT }}>Destination</strong> bleibt bis zur Ankunft klassifiziert.<br /><br />
+              <span style={{ color: MUTED, fontSize: 10, letterSpacing: "0.2em" }}>
+                FREISCHALT-CODE FOLGT. BEREIT SEIN.
+              </span>
             </div>
             <UnlockGate pin={UNLOCK_PIN} onSuccess={() => {
                 try {
