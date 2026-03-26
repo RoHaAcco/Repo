@@ -498,7 +498,7 @@ function TypewriterText({ text, speed, style }) {
 
 
 // --- UNLOCK GATE COMPONENT ---
-function UnlockGate({ pin, onSuccess }) {
+function UnlockGate({ pin, onSuccess, label }) {
   const [show, setShow]   = useState(false);
   const [val, setVal]     = useState("");
   const [err, setErr]     = useState(false);
@@ -516,14 +516,14 @@ function UnlockGate({ pin, onSuccess }) {
       onMouseLeave={e => { e.currentTarget.style.background = PURPLE; e.currentTarget.style.transform = "scale(1)"; }}
       style={{ display: "block", width: "100%", padding: "18px 16px", background: PURPLE, border: `1px solid ${PURPLE}`, color: "#fff", fontSize: 15, letterSpacing: "0.25em", fontFamily: "monospace", fontWeight: 700, transition: "all 0.15s", boxShadow: "0 0 30px #7060f066" }}
     >
-      &#9654; &nbsp; MISSION ANNEHMEN
+      {label || <>&#9654; &nbsp; MISSION ANNEHMEN</>}
     </button>
   );
 
   return (
     <div style={{ border: `1px solid ${PURPLE}`, background: CARD }}>
       <div style={{ background: "#140f28", padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: PURPLE }}>
-        FREISCHALT-CODE EINGEBEN
+        {label ? label : "MISSION ANNEHMEN"} – CODE EINGEBEN
       </div>
       <div style={{ padding: "20px 16px", textAlign: "center" }}>
         <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.12em", marginBottom: 16 }}>
@@ -703,7 +703,8 @@ function IntroScreen({ onAccept }) {
                 FREISCHALT-CODE FOLGT. BEREIT SEIN.
               </span>
             </div>
-            <UnlockGate pin={UNLOCK_PIN} onSuccess={() => {
+            <button
+              onClick={() => {
                 try {
                   const ctx = new (window.AudioContext || window.webkitAudioContext)();
                   const notes = [523, 659, 784, 1047];
@@ -720,8 +721,14 @@ function IntroScreen({ onAccept }) {
                     osc.stop(ctx.currentTime + i*0.1 + 0.2);
                   });
                 } catch(e) {}
-                setTimeout(onAccept, 400);
-              }} />
+                setTimeout(onAccept, 300);
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#8878ff"; e.currentTarget.style.transform = "scale(1.02)"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = PURPLE; e.currentTarget.style.transform = "scale(1)"; }}
+              style={{ display: "block", width: "100%", padding: "18px 16px", background: PURPLE, border: `1px solid ${PURPLE}`, color: "#fff", fontSize: 15, letterSpacing: "0.25em", fontFamily: "monospace", fontWeight: 700, transition: "all 0.15s", boxShadow: "0 0 30px #7060f066" }}
+            >
+              &#9654; &nbsp; MISSION ANNEHMEN
+            </button>
             <div style={{ textAlign: "center", marginTop: 10, fontSize: 10, color: MUTED, letterSpacing: "0.1em" }}>
               Diese Nachricht zerstört sich nach dem Öffnen. Oder auch nicht.
             </div>
@@ -815,12 +822,7 @@ function MissionPage({ onStart }) {
         ))}
       </div>
 
-      <button onClick={onStart}
-        onMouseEnter={e=>e.currentTarget.style.opacity="0.85"}
-        onMouseLeave={e=>e.currentTarget.style.opacity="1"}
-        style={{ display: "block", width: "100%", padding: 16, background: PURPLE, border: "none", color: "#fff", fontSize: 14, letterSpacing: "0.2em", fontFamily: "monospace", cursor: "pointer", fontWeight: 700 }}>
-        EINSATZAKTE ÖFFNEN
-      </button>
+      <UnlockGate pin="2905" onSuccess={onStart} label="&#128274; EINSATZAKTE ÖFFNEN – TOP SECRET" />
     </div>
   );
 }
