@@ -171,22 +171,22 @@ const data = {
   leon: {
     emoji: "😄", label: "Leon P.", group: "geheim",
     deckname: "Deckname: Der Gemütliche | Funktion: 2. Vorstand | Bartwuchs: Projekt läuft, Ergebnis offen",
-    bio: "Bekannt für: Gemütlichkeit auf absolutem Profiniveau, echter Geselligkeit und einem Kopf, der mehr denkt als er verrät - studiert immerhin. Kein nennenswerter Bartwuchs - wir erwähnen es, weil er es hasst. Kartenspiele? Gewinnt meistens. Zweiter Vorstand mit Herz aus purem Gold.",
+    bio: "Bekannt für: Geselligkeit auf Profiniveau und einen Kopf, der mehr denkt als er verrät - studiert immerhin. Kein nennenswerter Bartwuchs - wir erwähnen es, weil er es hasst. Kartenspiele? Gewinnt meistens, bestreitet es aber trotzdem jedes Mal. Zweiter Vorstand mit Herz aus purem Gold.",
     sections: [
       { title: "🏕️ Pflicht", items: [
         { name: "Isomatte", note: "Deine Gemütlichkeit macht den Boden physikalisch leider nicht weicher.", badge: "MUSS" },
         { name: "Schlafsack", note: "Komfort für Menschen mit ausgeprägtem Gespür für Komfort. Du qualifizierst eindeutig.", badge: "MUSS" },
         { name: "Ausweis oder Reisepass", note: "Sympathie allein reicht nicht als Einreisedokument.", badge: "MUSS" },
       ]},
-      { title: "😄 Leons Gemütlichkeits-Arsenal", items: [
+      { title: "😄 Leons Gepäck des Vertrauens", items: [
         { name: "Kartenspiel (mindestens eines, besser zwei)", note: "Du wirst gewinnen. Alle wissen es. Du weißt es. Die Karten wissen es." },
         { name: "Bartwuchs-Booster-Serum (Apotheke genügt völlig)", note: "Das Projekt läuft. Die Genetik verhandelt noch. Das Serum hält die Hoffnung lebendig." },
-        { name: "Kuscheldecke (komprimierbar, Rucksackformat)", note: "Du bist ein Riesenbaby - das ist kein Vorwurf, das ist eine Beschreibung mit echter Zuneigung." },
-        { name: "Schnuller (ironisch verpackt, mit Schleifchen)", note: "Für den absoluten Notfall. Riesenbabys wollen versorgt werden.", badge: "OPTIONAL" },
-        { name: "Riesenportion Gummibärchen (mindestens 500g)", note: "Gemütlichkeit braucht Grundversorgung. Hunger ist kein Vibe." },
+        { name: "Vibrationsmassagegerät (Schulter und Nacken)", note: "Für die Muskeln nach dem langen Studientag. Ausschließlich. Hör auf zu grinsen." },
+        { name: "Heizdecke (zusammengefaltet, Reiseformat)", note: "Der kluge Kopf braucht warme Füße. Das ist wissenschaftlich belegt. Irgendwo." },
+        { name: "Riesenportion Gummibärchen (mindestens 500g)", note: "Für die Energie beim Kartenspiel. Und für alle anderen, die dich um etwas bitten." },
         { name: "Aufblasbare Sitzunterlage für die Zugfahrt", note: "Komfort ist keine Schwäche. Komfort ist eine bewusste Lebenshaltung." },
         { name: "Zweiter-Vorstand-Abzeichen (selbst laminiert)", note: "Damit man's weiß. Und damit Maxis Abzeichen im direkten Vergleich noch imposanter wirkt." },
-        { name: "Nackenkissen (Reiseformat, Einheitsgröße)", note: "Lange Fahrt. Dein Nacken hat das absolut verdient. Du auch." },
+        { name: "Handcreme (für die vielen Kartenspiel-Stunden)", note: "Gepflegte Hände sind das Werkzeug des Champions. Niemand zweifelt daran." },
       ]},
     ],
     secret: {
@@ -496,8 +496,66 @@ function TypewriterText({ text, speed, style }) {
 }
 
 
+// --- UNLOCK GATE COMPONENT ---
+function UnlockGate({ pin, onSuccess }) {
+  const [show, setShow]   = useState(false);
+  const [val, setVal]     = useState("");
+  const [err, setErr]     = useState(false);
+  const [shake, setShake] = useState(false);
+
+  const tryPin = (input) => {
+    if (input === pin) { onSuccess(); }
+    else { setErr(true); setShake(true); setVal(""); setTimeout(() => setShake(false), 500); }
+  };
+
+  if (!show) return (
+    <button
+      onClick={() => setShow(true)}
+      onMouseEnter={e => { e.currentTarget.style.background = "#8878ff"; e.currentTarget.style.transform = "scale(1.02)"; }}
+      onMouseLeave={e => { e.currentTarget.style.background = PURPLE; e.currentTarget.style.transform = "scale(1)"; }}
+      style={{ display: "block", width: "100%", padding: "18px 16px", background: PURPLE, border: `1px solid ${PURPLE}`, color: "#fff", fontSize: 15, letterSpacing: "0.25em", fontFamily: "monospace", fontWeight: 700, transition: "all 0.15s", boxShadow: "0 0 30px #7060f066" }}
+    >
+      &#9654; &nbsp; MISSION ANNEHMEN
+    </button>
+  );
+
+  return (
+    <div style={{ border: `1px solid ${PURPLE}`, background: CARD }}>
+      <div style={{ background: "#140f28", padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: PURPLE }}>
+        FREISCHALT-CODE EINGEBEN
+      </div>
+      <div style={{ padding: "20px 16px", textAlign: "center" }}>
+        <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.12em", marginBottom: 16 }}>
+          Deinen persönlichen Freischalt-Code eingeben
+        </div>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 12, transform: shake ? "translateX(5px)" : "none", transition: "transform 0.08s" }}>
+          {[0,1,2,3].map(i => (
+            <div key={i} style={{ width: 42, height: 50, border: `1px solid ${err ? RED : val.length > i ? ACCENT : BORDER}`, background: "#0d0d18", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22, color: ACCENT, fontFamily: "monospace", transition: "border-color 0.2s" }}>
+              {val.length > i ? "●" : ""}
+            </div>
+          ))}
+        </div>
+        {err && <div style={{ fontSize: 11, color: RED, marginBottom: 12, letterSpacing: "0.1em" }}>FALSCHER CODE – ZUGRIFF VERWEIGERT</div>}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 52px)", gap: 8, justifyContent: "center" }}>
+          {["1","2","3","4","5","6","7","8","9","⌫","0","✓"].map(k => (
+            <button key={k}
+              onClick={() => {
+                if (k === "⌫") { setVal(v => v.slice(0,-1)); setErr(false); }
+                else if (k === "✓") { tryPin(val); }
+                else if (val.length < 4) { const nv = val+k; setVal(nv); setErr(false); if (nv.length===4) setTimeout(()=>tryPin(nv),120); }
+              }}
+              style={{ width: 52, height: 52, background: k==="✓" ? PURPLE : "#0d0d18", border: `1px solid ${k==="✓" ? PURPLE : BORDER}`, color: TEXT, fontSize: k==="⌫" ? 16 : 20, fontFamily: "monospace", cursor: "pointer" }}
+            >{k}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // --- INTRO SCREEN -----------------------------
 function IntroScreen({ onAccept }) {
+  const UNLOCK_PIN = "2905";
   const [phase, setPhase] = useState(0);
   const [countdown, setCountdown] = useState({d:0,h:0,m:0,s:0});
   const audioRef = useRef(null);
@@ -631,12 +689,13 @@ function IntroScreen({ onAccept }) {
         {phase >= 5 && (
           <div className="fade-in-up">
             <div style={{ border: `1px solid ${BORDER}`, background: CARD, padding: "16px 20px", marginBottom: 20, fontSize: 12, color: "#8888aa", lineHeight: 1.9, textAlign: "center" }}>
-              Diese Nachricht ist <strong style={{ color: TEXT }}>ausschliesslich fuer dich bestimmt</strong>.<br />
-              Deine persoenliche Einsatzakte und ein <strong style={{ color: PURPLE }}>geheimer Auftrag</strong> warten.<br />
+              Diese Nachricht ist <strong style={{ color: TEXT }}>ausschliesslich für dich bestimmt</strong>.<br />
+              Deine persönliche Einsatzakte und ein <strong style={{ color: PURPLE }}>geheimer Auftrag</strong> warten.<br />
               <span style={{ color: MUTED, fontSize: 11 }}>Destination: ████████ · Wird bei Ankunft offenbart.</span>
             </div>
             <button
-              onClick={() => {
+              onClick={() => {}}
+            <UnlockGate pin={UNLOCK_PIN} onSuccess={() => {
                 try {
                   const ctx = new (window.AudioContext || window.webkitAudioContext)();
                   const notes = [523, 659, 784, 1047];
@@ -653,16 +712,10 @@ function IntroScreen({ onAccept }) {
                     osc.stop(ctx.currentTime + i*0.1 + 0.2);
                   });
                 } catch(e) {}
-                setTimeout(onAccept, 300);
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#8878ff"; e.currentTarget.style.transform = "scale(1.02)"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = PURPLE; e.currentTarget.style.transform = "scale(1)"; }}
-              style={{ display: "block", width: "100%", padding: "18px 16px", background: PURPLE, border: `1px solid ${PURPLE}`, color: "#fff", fontSize: 15, letterSpacing: "0.25em", fontFamily: "monospace", fontWeight: 700, transition: "all 0.15s", boxShadow: "0 0 30px #7060f066" }}
-            >
-              ▶ &nbsp; MISSION ANNEHMEN
-            </button>
+                setTimeout(onAccept, 400);
+              }} />
             <div style={{ textAlign: "center", marginTop: 10, fontSize: 10, color: MUTED, letterSpacing: "0.1em" }}>
-              Diese Nachricht zerstoert sich nach dem Oeffnen. Oder auch nicht.
+              Diese Nachricht zerstört sich nach dem Öffnen. Oder auch nicht.
             </div>
           </div>
         )}
@@ -699,11 +752,11 @@ function MissionPage({ onStart }) {
         <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>MISSIONSBRIEFING</div>
         <div style={{ padding: 16, fontSize: 13, color: "#9999bb", lineHeight: 2 }}>
           Agent/in,<br /><br />
-          du haeltst gerade das einzige Dokument in Haenden, das zwischen einem legendaeren Wochenende und totaler Gepaeck-Katastrophe steht.<br /><br />
-          Das <strong style={{ color: TEXT }}>Geheimkomitee</strong> hat deine persoenliche Einsatzakte zusammengestellt - basierend auf deiner Persoenlichkeit, deiner Reisehistorie und einem Algorithmus, der nach mehrfacher interner Pruefung noch immer keinen vollstaendigen Sinn ergibt.<br /><br />
-          Die <strong style={{ color: TEXT }}>Destination</strong> ist fuer einen Teil des Teams bis zur Ankunft vollstaendig klassifiziert. Spekulationen werden aktiv demontiert. Fragen werden nicht beantwortet.<br /><br />
-          Jede Akte enthaelt ausserdem einen <strong style={{ color: PURPLE }}>persoenlichen Geheimauftrag</strong> - gesichert durch deinen individuellen PIN. Nur du kennst ihn. Nur du darfst ihn sehen.<br /><br />
-          Deine Aufgabe: Pack. Erscheine puenktlich. Bring keine uebermassige Vernunft mit - es sei denn, du heisst Emily.
+          du hältst gerade das einzige Dokument in Haenden, das zwischen einem legendaeren Wochenende und totaler Gepäck-Katastrophe steht.<br /><br />
+          Das <strong style={{ color: TEXT }}>Geheimkomitee</strong> hat deine persönliche Einsatzakte zusammengestellt - basierend auf deiner Persönlichkeit, deiner Reisehistorie und einem Algorithmus, der nach mehrfacher interner Prüfung noch immer keinen vollständigen Sinn ergibt.<br /><br />
+          Die <strong style={{ color: TEXT }}>Destination</strong> ist für einen Teil des Teams bis zur Ankunft vollständig klassifiziert. Spekulationen werden aktiv demontiert. Fragen werden nicht beantwortet.<br /><br />
+          Jede Akte enthält ausserdem einen <strong style={{ color: PURPLE }}>persönlichen Geheimauftrag</strong> - gesichert durch deinen individuellen PIN. Nur du kennst ihn. Nur du darfst ihn sehen.<br /><br />
+          Deine Aufgabe: Pack. Erscheine pünktlich. Bring keine übermäßige Vernunft mit - es sei denn, du heißt Emily.
         </div>
       </div>
 
@@ -711,11 +764,11 @@ function MissionPage({ onStart }) {
         <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>OPERATIVE GRUNDREGELN</div>
         {[
           ["1","Isomatte und Schlafsack sind Pflicht. Kein Verhandlungsspielraum. Keine Ausnahmen."],
-          ["2","Reisepass oder Personalausweis ist einzupacken. Der Grund wird spaetestens vor Ort klar."],
-          ["3","Was auf der Reise passiert, bleibt auf der Reise. Maxi verfuegt ueber Schweigegeld in Fremdwaehrung."],
-          ["4","Jede Akte enthaelt einen Geheimauftrag mit persoenlichem PIN. Nicht teilen, nicht zeigen, nicht andeuten."],
-          ["5","Das Komitee behaelt sich vor, alle Ereignisse im Nachhinein als vollstaendig geplant darzustellen."],
-          ["6","Jannik fuehrt die Gruppe. Robert fuehrt, wenn Jannik ausfaellt. Die Gruppe ueberlebt das."],
+          ["2","Reisepass oder Personalausweis ist einzupacken. Der Grund wird spätestens vor Ort klar."],
+          ["3","Was auf der Reise passiert, bleibt auf der Reise. Maxi verfuegt über Schweigegeld in Fremdwährung."],
+          ["4","Jede Akte enthält einen Geheimauftrag mit persönlichem PIN. Nicht teilen, nicht zeigen, nicht andeuten."],
+          ["5","Das Komitee behält sich vor, alle Ereignisse im Nachhinein als vollständig geplant darzustellen."],
+          ["6","Jannik führt die Gruppe. Robert führt, wenn Jannik ausfällt. Die Gruppe überlebt das."],
         ].map(([n,t]) => (
           <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12 }}>
             <span style={{ color: RED, fontWeight: 700, flexShrink: 0, fontSize: 12 }}>{"§"+n}</span>
@@ -725,14 +778,14 @@ function MissionPage({ onStart }) {
       </div>
 
       <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 28 }}>
-        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>EINSATZTEAM - UEBERSICHT</div>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>EINSATZTEAM - ÜBERSICHT</div>
         <div style={{ padding: "6px 16px", background: "#0f1f0f", fontSize: 10, color: GREEN, letterSpacing: "0.15em" }}>NICHT EINGEWEIHT</div>
         {[
           ["Jannik B.","Reiseleiter - Chaos-Offizier - Snus-Depot"],
           ["Maxi L.","Vorstand - Stille Wasser - Schnupftabak-Connaisseur"],
-          ["Leon P.","2. Vorstand - Gemutlichkeits-Beauftragter - Bartwuchs: in Verhandlung"],
+          ["Leon P.","2. Vorstand - Gemütlichkeits-Beauftragter - Bartwuchs: in Verhandlung"],
           ["Maya L.","Erste-Hilfe-Fee - Geheime Partymaschine - Maxis Schwester"],
-          ["Emily S.","Die Juengste - Kellnerin - Gute Seele"],
+          ["Emily S.","Die Jüngste - Kellnerin - Gute Seele"],
         ].map(([n,r]) => (
           <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
             <div><div style={{ fontSize: 13, color: TEXT }}>{n}</div><div style={{ fontSize: 11, color: MUTED }}>{r}</div></div>
@@ -741,9 +794,9 @@ function MissionPage({ onStart }) {
         <div style={{ padding: "6px 16px", background: "#0f1a2f", fontSize: 10, color: "#60a0f0", letterSpacing: "0.15em" }}>EINGEWEIHT</div>
         {[
           ["Robert H.","Backup-Reiseleiter - Ehem. 1. Vorstand - Feuerwehrkommandant"],
-          ["Luca P.","Ehem. Kassier - Familienmensch - Leons grosser Bruder"],
+          ["Luca P.","Ehem. Kassier - Familienmensch - Leons großer Bruder"],
           ["Jule G.","Ehemalige Social-Media - Kinderkrippe - Partywildcard"],
-          ["Alex H.","Ehem. 2. Vorstand - Halbmarathonlaeufer - Partyband - Kichererbse"],
+          ["Alex H.","Ehem. 2. Vorstand - Halbmarathonläufer - Partyband - Kichererbse"],
         ].map(([n,r]) => (
           <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
             <div>
@@ -758,7 +811,7 @@ function MissionPage({ onStart }) {
         onMouseEnter={e=>e.currentTarget.style.opacity="0.85"}
         onMouseLeave={e=>e.currentTarget.style.opacity="1"}
         style={{ display: "block", width: "100%", padding: 16, background: PURPLE, border: "none", color: "#fff", fontSize: 14, letterSpacing: "0.2em", fontFamily: "monospace", cursor: "pointer", fontWeight: 700 }}>
-        EINSATZAKTE OEFFNEN
+        EINSATZAKTE ÖFFNEN
       </button>
     </div>
   );
