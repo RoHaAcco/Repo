@@ -677,22 +677,92 @@ function MissionPage({ onStart }) {
   const lines = ["VERSCHLUESSELTE NACHRICHT EMPFANGEN...","ABSENDER: UNBEKANNT","ENTSCHLUESSELUNG LAEUFT...","ZUGRIFF GEWAEHRT."];
   useEffect(() => { lines.forEach((_,i) => setTimeout(()=>setVisible(i+1), i*750)); }, []);
 
-  // Typewriter hook for bio
   return (
     <div style={{ background: BG, minHeight: "100vh", fontFamily: "monospace", color: TEXT, padding: "32px 20px 64px", maxWidth: 700, margin: "0 auto" }}>
       <div className="scanline" />
       <div style={{ marginBottom: 28, minHeight: 88 }}>
         {lines.slice(0,visible).map((l,i) => (
-          <div key={i} style={{ fontSize: 11, color: i===visible-1 ? ACCENT : MUTED, letterSpacing: "0.15em", marginBottom: 6 }}>&gt; {l}{i===visible-1 && visible<4 ? <span className="cursor-blink" style={{color:ACCENT}}> █</span> : ""}</div>
+          <div key={i} style={{ fontSize: 11, color: i===visible-1 ? ACCENT : MUTED, letterSpacing: "0.15em", marginBottom: 6 }}>
+            &gt; {l}{i===visible-1 && visible<4 ? <span className="cursor-blink" style={{color:ACCENT}}> &#9608;</span> : ""}
+          </div>
         ))}
       </div>
       <div style={{ textAlign: "center", marginBottom: 28 }}>
-        <div style={{ display: "inline-block", background: RED, color: "#fff", fontSize: 11, letterSpacing: "0.3em", padding: "4px 16px", marginBottom: 16, transform: "rotate(-1deg)" }}>OPERATION #BEST-TEAM · STRENG GEHEIM</div>
+        <div style={{ display: "inline-block", background: RED, color: "#fff", fontSize: 11, letterSpacing: "0.3em", padding: "4px 16px", marginBottom: 16, transform: "rotate(-1deg)" }}>OPERATION #BEST-TEAM - STRENG GEHEIM</div>
         <div style={{ fontSize: "clamp(2.5rem,10vw,4.5rem)", fontWeight: 900, color: ACCENT, lineHeight: 1, fontFamily: "sans-serif" }}>#BEST-Team</div>
-        <div style={{ fontSize: "clamp(1.4rem,6vw,2.5rem)", fontWeight: 900, color: PURPLE, fontFamily: "sans-serif", marginBottom: 6 }}>goes ░░░░░░░░░</div>
-        <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.2em" }}>DESTINATION: ████████ · ABREISE: BALD™</div>
+        <div style={{ fontSize: "clamp(1.4rem,6vw,2.5rem)", fontWeight: 900, color: PURPLE, fontFamily: "sans-serif", marginBottom: 6 }}>goes &#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;</div>
+        <div style={{ fontSize: 11, color: MUTED, letterSpacing: "0.2em" }}>DESTINATION: &#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608;&#9608; - ABREISE: BALD</div>
       </div>
       <div style={{ borderTop: `1px solid ${BORDER}`, margin: "24px 0" }} />
+
+      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>MISSIONSBRIEFING</div>
+        <div style={{ padding: 16, fontSize: 13, color: "#9999bb", lineHeight: 2 }}>
+          Agent/in,<br /><br />
+          du haeltst gerade das einzige Dokument in Haenden, das zwischen einem legendaeren Wochenende und totaler Gepaeck-Katastrophe steht.<br /><br />
+          Das <strong style={{ color: TEXT }}>Geheimkomitee</strong> hat deine persoenliche Einsatzakte zusammengestellt - basierend auf deiner Persoenlichkeit, deiner Reisehistorie und einem Algorithmus, der nach mehrfacher interner Pruefung noch immer keinen vollstaendigen Sinn ergibt.<br /><br />
+          Die <strong style={{ color: TEXT }}>Destination</strong> ist fuer einen Teil des Teams bis zur Ankunft vollstaendig klassifiziert. Spekulationen werden aktiv demontiert. Fragen werden nicht beantwortet.<br /><br />
+          Jede Akte enthaelt ausserdem einen <strong style={{ color: PURPLE }}>persoenlichen Geheimauftrag</strong> - gesichert durch deinen individuellen PIN. Nur du kennst ihn. Nur du darfst ihn sehen.<br /><br />
+          Deine Aufgabe: Pack. Erscheine puenktlich. Bring keine uebermassige Vernunft mit - es sei denn, du heisst Emily.
+        </div>
+      </div>
+
+      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 16 }}>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>OPERATIVE GRUNDREGELN</div>
+        {[
+          ["1","Isomatte und Schlafsack sind Pflicht. Kein Verhandlungsspielraum. Keine Ausnahmen."],
+          ["2","Reisepass oder Personalausweis ist einzupacken. Der Grund wird spaetestens vor Ort klar."],
+          ["3","Was auf der Reise passiert, bleibt auf der Reise. Maxi verfuegt ueber Schweigegeld in Fremdwaehrung."],
+          ["4","Jede Akte enthaelt einen Geheimauftrag mit persoenlichem PIN. Nicht teilen, nicht zeigen, nicht andeuten."],
+          ["5","Das Komitee behaelt sich vor, alle Ereignisse im Nachhinein als vollstaendig geplant darzustellen."],
+          ["6","Jannik fuehrt die Gruppe. Robert fuehrt, wenn Jannik ausfaellt. Die Gruppe ueberlebt das."],
+        ].map(([n,t]) => (
+          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12 }}>
+            <span style={{ color: RED, fontWeight: 700, flexShrink: 0, fontSize: 12 }}>{"§"+n}</span>
+            <span style={{ fontSize: 12, color: MUTED, lineHeight: 1.6 }}>{t}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ border: `1px solid ${BORDER}`, background: CARD, marginBottom: 28 }}>
+        <div style={{ background: BORDER, padding: "8px 16px", fontSize: 11, letterSpacing: "0.2em", color: ACCENT }}>EINSATZTEAM - UEBERSICHT</div>
+        <div style={{ padding: "6px 16px", background: "#0f1f0f", fontSize: 10, color: GREEN, letterSpacing: "0.15em" }}>NICHT EINGEWEIHT</div>
+        {[
+          ["Jannik B.","Reiseleiter - Chaos-Offizier - Snus-Depot"],
+          ["Maxi L.","Vorstand - Stille Wasser - Schnupftabak-Connaisseur"],
+          ["Leon P.","2. Vorstand - Gemutlichkeits-Beauftragter - Bartwuchs: in Verhandlung"],
+          ["Maya L.","Erste-Hilfe-Fee - Geheime Partymaschine - Maxis Schwester"],
+          ["Emily S.","Die Juengste - Kellnerin - Gute Seele"],
+        ].map(([n,r]) => (
+          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
+            <div><div style={{ fontSize: 13, color: TEXT }}>{n}</div><div style={{ fontSize: 11, color: MUTED }}>{r}</div></div>
+          </div>
+        ))}
+        <div style={{ padding: "6px 16px", background: "#0f1a2f", fontSize: 10, color: "#60a0f0", letterSpacing: "0.15em" }}>EINGEWEIHT</div>
+        {[
+          ["Robert H.","Backup-Reiseleiter - Ehem. 1. Vorstand - Feuerwehrkommandant"],
+          ["Luca P.","Ehem. Kassier - Familienmensch - Leons grosser Bruder"],
+          ["Jule G.","Ehemalige Social-Media - Kinderkrippe - Partywildcard"],
+          ["Alex H.","Ehem. 2. Vorstand - Halbmarathonlaeufer - Partyband - Kichererbse"],
+        ].map(([n,r]) => (
+          <div key={n} style={{ padding: "10px 16px", borderBottom: `1px solid ${BORDER}`, display: "flex", gap: 12, alignItems: "center" }}>
+            <div>
+              <div style={{ fontSize: 13, color: TEXT, display: "flex", alignItems: "center", gap: 8 }}>{n} <span style={{ fontSize: 9, background: "#14532d", color: "#86efac", padding: "1px 6px", letterSpacing: "0.1em" }}>EINGEWEIHT</span></div>
+              <div style={{ fontSize: 11, color: MUTED }}>{r}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button onClick={onStart}
+        onMouseEnter={e=>e.currentTarget.style.opacity="0.85"}
+        onMouseLeave={e=>e.currentTarget.style.opacity="1"}
+        style={{ display: "block", width: "100%", padding: 16, background: PURPLE, border: "none", color: "#fff", fontSize: 14, letterSpacing: "0.2em", fontFamily: "monospace", cursor: "pointer", fontWeight: 700 }}>
+        EINSATZAKTE OEFFNEN
+      </button>
+    </div>
+  );
+}
 
 // -------------------------------------------
 //  MAIN APP
